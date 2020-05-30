@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Users">
+    <select id="summary-condition">
+        <isNotNull  prepend="AND" property="rowid">     users.rowid = #rowid#       </isNotNull>
+        <isNotNull  prepend="AND" property="user_id">   users.user_id = #user_id#   </isNotNull>
+        <isNotNull  prepend="AND" property="name">      users.name = #name#         </isNotNull>
+    </select>
+    
+    <select id="summary" parameterClass="\Test\Sample\Integration\Condition\UserCondition" resultClass="\Test\Sample\Business\Entity\UserEntity">
+        SELECT
+              users.rowid
+            , users.rev
+            , users.user_id
+            , users.name
+        FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <include refid="summary-condition" />
+        </dynamic>
+        <dynamic>
+            <isNotNull property="orderby">  ORDER BY $orderby$  </isNotNull>
+            <isNotNull property="limit">    LIMIT #limit#       </isNotNull>
+            <isNotNull property="offset">   OFFSET #offset#     </isNotNull>
+        </dynamic>
+    </select>
+
+    <select id="count" parameterClass="\Test\Sample\Integration\Condition\UserCondition" resultClass="\Citrus\Database\Result">
+        SELECT
+              COUNT(*) AS count
+        FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <include refid="summary-condition" />
+        </dynamic>
+    </select>
+    
+    <select id="name" parameterClass="Medica5ActorContentCondition" resultClass="\Citrus\Database\Result">
+        SELECT
+              users.user_id AS id
+            , users.name
+        FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <include refid="summary-condition" />
+        </dynamic>
+        <dynamic>
+            <isNotNull property="orderby">  ORDER BY $orderby$  </isNotNull>
+            <isNotNull property="limit">    LIMIT #limit#       </isNotNull>
+            <isNotNull property="offset">   OFFSET #offset#     </isNotNull>
+        </dynamic>
+    </select>
+    
+    <select id="detail" parameterClass="\Test\Sample\Integration\Condition\UserCondition" resultClass="\Test\Sample\Business\Entity\UserEntity">
+        SELECT
+              users.rowid
+            , users.rev
+            , users.user_id
+            , users.name
+            , users.status
+            , users.created_at
+            , users.updated_at
+        FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <isNotNull prepend="AND" property="rowid">      users.rowid = #rowid#       </isNotNull>
+            <isNotNull prepend="AND" property="rev">        users.rev = #rev#           </isNotNull>
+            <isNotNull prepend="AND" property="user_id">    users.user_id = #user_id#   </isNotNull>
+            <isNotNull prepend="AND" property="name">       users.name = #name#         </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull property="orderby">  ORDER BY $orderby$  </isNotNull>
+            <isNotNull property="limit">    LIMIT #limit#       </isNotNull>
+            <isNotNull property="offset">   OFFSET #offset#     </isNotNull>
+        </dynamic>
+    </select>
+    
+    <insert id="regist" parameterClass="\Test\Sample\Business\Entity\UserEntity">
+    INSERT INTO {SCHEMA}users
+    (
+        <dynamic>
+            <isNotEmpty prepend="," property="user_id">     user_id     </isNotEmpty>
+            <isNotNull  prepend="," property="name">        name        </isNotNull>
+            <isNotNull  prepend="," property="status">      status      </isNotNull>
+            <isNotNull  prepend="," property="created_at">  created_at </isNotNull>
+            <isNotNull  prepend="," property="updated_at">  updated_at </isNotNull>
+       </dynamic>
+    )
+    VALUES
+    (
+        <dynamic>
+            <isNotEmpty prepend="," property="user_id">     #user_id#       </isNotEmpty>
+            <isNotNull  prepend="," property="name">        #name#          </isNotNull>
+            <isNotNull  prepend="," property="status">      #status#        </isNotNull>
+            <isNotNull  prepend="," property="created_at">  #created_at#   </isNotNull>
+            <isNotNull  prepend="," property="updated_at">  #updated_at#   </isNotNull>
+        </dynamic>
+    )
+    </insert>
+
+    <update id="modify" parameterClass="\Test\Sample\Business\Entity\UserEntity">
+        UPDATE {SCHEMA}users
+        <dynamic prepend="SET">
+                rev = rev + 1
+            <isNotEmpty prepend="," property="user_id">     user_id = #user_id#         </isNotEmpty>
+            <isNotNull  prepend="," property="name">        name = #name#               </isNotNull>
+            <isNotNull  prepend="," property="status">      status = #status#           </isNotNull>
+            <isNotNull  prepend="," property="updated_at">  updated_at = #updated_at#   </isNotNull>
+        </dynamic>
+        <dynamic prepend="WHERE">
+            <isNotNull  prepend="AND" property="condition.rowid">   rowid = #condition.rowid#       </isNotNull>
+            <isNotNull  prepend="AND" property="condition.rev">     rev = #condition.rev#           </isNotNull>
+            <isNotEmpty prepend="AND" property="condition.user_id"> user_id = #condition.user_id#   </isNotEmpty>
+        </dynamic>
+    </update>
+    
+    <delete id="remove" parameterClass="\Test\Sample\Integration\Condition\UserCondition">
+        DELETE FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <isNotNull  prepend="AND" property="rowid">     rowid = #rowid#     </isNotNull>
+            <isNotNull  prepend="AND" property="rev">       rev = #rev#         </isNotNull>
+            <isNotEmpty prepend="AND" property="user_id">   user_id = #user_id# </isNotEmpty>
+        </dynamic>
+    </delete>
+    
+    <select id="facesSummary" parameterClass="\Test\Sample\Integration\Condition\UserCondition" resultClass="\Test\Sample\Business\Entity\UserEntity">
+        SELECT
+              users.rowid
+            , users.rev
+            , users.user_id
+            , users.name
+        FROM {SCHEMA}users
+        <dynamic prepend="WHERE">
+            <include refid="summary-condition" />
+        </dynamic>
+        <dynamic>
+            <isNotNull property="orderby">  ORDER BY $orderby$  </isNotNull>
+            <isNotNull property="limit">    LIMIT #limit#       </isNotNull>
+            <isNotNull property="offset">   OFFSET #offset#     </isNotNull>
+        </dynamic>
+    </select>
+    
+    <select id="facesDetail" parameterClass="\Test\Sample\Integration\Condition\UserCondition" resultClass="\Test\Sample\Business\Entity\UserEntity">
+        <include refid="detail" />
+    </select>
+</sqlMap>

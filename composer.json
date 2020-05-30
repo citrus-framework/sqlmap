@@ -1,0 +1,32 @@
+{
+  "name": "citrus-framework/generation",
+  "description": "php generation management library",
+  "keywords": ["citrus", "php", "library", "generation"],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "take64",
+      "email": "take64@citrus.tk"
+    }
+  ],
+  "require": {
+    "citrus-framework/configure": "^1.0",
+    "citrus-framework/variables": "^1.0",
+    "citrus-framework/database": "^1.0",
+    "citrus-framework/console": "^1.0",
+    "ext-posix": "*",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "php": "^7.3",
+    "phpunit/phpunit": "^8.4",
+    "nunomaduro/phpinsights": "^v1.13"
+  },
+  "autoload": {
+    "psr-4": {
+      "Citrus\\": "src/",
+      "Test\\": "tests/"
+    }
+  }
+}
