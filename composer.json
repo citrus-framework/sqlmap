@@ -10,6 +10,9 @@
       "email": "take64@citrus.tk"
     }
   ],
+  "bin": [
+    "src/bin/cf-integration"
+  ],
   "require": {
     "citrus-framework/configure": "^1.0",
     "citrus-framework/database": "^1.0",
