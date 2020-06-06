@@ -16,7 +16,6 @@ use Citrus\Database\DSN;
 use Citrus\Migration;
 use Citrus\Migration\VersionManager;
 use PHPUnit\Framework\TestCase;
-use Test\Sample\Citrus_20190101000000_CreateTableUsers;
 use Test\TestFile;
 
 
@@ -93,7 +92,9 @@ class CatalogManagerTest extends TestCase
         $versionManager = new VersionManager($dsn);
 
         // マイグレーションの正方向実行
-        $migrationItem = new Citrus_20190101000000_CreateTableUsers();
+        include_once(__DIR__ . '/../../Sample/Citrus_20190102000000_CreateTableUsers.php');
+        $class_name = 'Citrus_20190102000000_CreateTableUsers';
+        $migrationItem = new $class_name();
         $versionManager->up($migrationItem);
 
         // テーブル名

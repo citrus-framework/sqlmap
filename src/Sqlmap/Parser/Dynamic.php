@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2017, CitrusFramework. All Rights Reserved.
+ * @copyright   Copyright 2020, CitrusSqlmap. All Rights Reserved.
  * @author      take64 <take64@citrus.tk>
  * @license     http://www.citrus.tk/
  */
 
 namespace Citrus\Sqlmap\Parser;
 
-use Citrus\Xml;
+use Citrus\Variable\Xmls;
 use DOMNamedNodeMap;
 
 /**
@@ -46,7 +46,7 @@ class Dynamic
      *
      * @param DOMNamedNodeMap|null $attributes
      */
-    public function __construct(DOMNamedNodeMap $attributes = null)
+    public function __construct(?DOMNamedNodeMap $attributes = null)
     {
         if (true === is_null($attributes))
         {
@@ -63,7 +63,7 @@ class Dynamic
             'compareValue' => 'compare_value',
         ];
 
-        $items = Xml::toList($attributes);
+        $items = Xmls::toList($attributes);
         foreach ($items as $name => $value)
         {
             // 設定キー
@@ -80,7 +80,7 @@ class Dynamic
      *
      * @param Dynamic $dynamic
      */
-    public function concatenate(Dynamic $dynamic)
+    public function concatenate(Dynamic $dynamic): void
     {
         $_prepend = $dynamic->getPrepend();
         $_query = $dynamic->getQuery();
@@ -111,7 +111,7 @@ class Dynamic
      *
      * @param string $query
      */
-    public function concatenateString(string $query)
+    public function concatenateString(string $query): void
     {
         $param_query = trim($query);
 
@@ -134,7 +134,7 @@ class Dynamic
     {
         if (trim($dynamic->query) && trim($var->query))
         {
-            if (empty($var->prepend) === false)
+            if (false === empty($var->prepend))
             {
                 $var->prepend = ' '.$var->prepend.' ';
             }

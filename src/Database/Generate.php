@@ -14,6 +14,13 @@ use Citrus\Configure\Configurable;
 use Citrus\Console\ConsoleOutput;
 use Citrus\Database\Catalog\CatalogManager;
 use Citrus\Variable\Dates;
+use Citrus\Variable\Klass;
+use Citrus\Variable\Klass\KlassFileComment;
+use Citrus\Variable\Klass\KlassMethod;
+use Citrus\Variable\Klass\KlassProperty;
+use Citrus\Variable\Klass\KlassReturn;
+use Citrus\Variable\Klass\KlassTrait;
+use Citrus\Variable\Klass\KlassVisibility;
 use Citrus\Variable\Singleton;
 
 /**
@@ -66,45 +73,30 @@ class Generate extends Configurable
     /**
      * Conditionクラスの生成
      *
-     * @param string $table_name   テーブル名
      * @param string $class_prefix クラス接頭辞
      */
-    public function condition(string $table_name, string $class_prefix): void
+    public function condition(string $class_prefix): void
     {
-        // 生成クラス名
-        $class_name = $class_prefix;
+        // 生成クラス名など
+        $namespace = $this->configures['namespace'] . '\\Integration\\Condition';
+        $class_name = $class_prefix . 'Condition';
+        $extend_name = '\\' . $namespace . '\\Integration\\Property\\' . $class_prefix . 'Property';
         // 出力ディレクトリ
         $output_dir = $this->configures['output_dir'];
 
-        // propertyファイル内容
-        $file_string = <<<EOT
-<?php
+        // クラス生成
+        $klass = (new Klass($class_name))
+            ->setStrictTypes(true)
+            ->setFileComment(
+                KlassFileComment::newRaw(sprintf('generated Citrus Condition file at %s', Dates::now()->formatTimestamp()))
+            )
+            ->setNamespace($namespace)
+            ->setClassComment($class_name)
+            ->setExtends($extend_name)
+            ->addTrait(new KlassTrait('\\Citrus\\Sqlmap\\Condition'));
 
-declare(strict_types=1);
-
-/**
- * generated Citrus Condition file at {#date#}
- */
- 
-namespace {#namespace#}\Integration\Condition;
-
-use {#namespace#}\Integration\Property\{#class_name#}Property;
-use Citrus\Sqlmap\Condition;
-
-class {#class_name#}Condition extends {#class_name#}Property
-{
-    use Condition;
-}
-
-EOT;
-
-        $file_string = str_replace('{#date#}', Dates::now()->formatTimestamp(), $file_string);
-        $file_string = str_replace('{#namespace#}', $this->configures['namespace'], $file_string);
-        $file_string = str_replace('{#table_name#}', $table_name, $file_string);
-        $file_string = str_replace('{#class_name#}', $class_name, $file_string);
-
-        $generate_class_path = sprintf('%s/Condition/%sCondition.class.php', $output_dir, $class_name);
-        file_put_contents($generate_class_path, $file_string);
+        $generate_class_path = sprintf('%s/Condition/%s.class.php', $output_dir, $class_name);
+        file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
 
@@ -113,53 +105,32 @@ EOT;
     /**
      * Daoクラスの生成
      *
-     * @param string $table_name   テーブル名
      * @param string $class_prefix クラス接頭辞
+     * @param string $table_name   テーブル名
      */
-    public function dao(string $table_name, string $class_prefix): void
+    public function dao(string $class_prefix, string $table_name): void
     {
-        // 生成クラス名
-        $class_name = $class_prefix;
+        // 生成クラス名など
+        $namespace = $this->configures['namespace'] . '\\Integration\\Dao';
+        $class_name = $class_prefix . 'Dao';
+        $extend_name = '\\Citrus\\Sqlmap\\Crud';
+        $sqlmap_path = '__DIR__ . \'/../Sqlmap/' . ucfirst($table_name) . '.xml\'';
         // 出力ディレクトリ
         $output_dir = $this->configures['output_dir'];
 
-        // ファイル内容
-        $file_string = <<<EOT
-<?php
+        // クラス生成
+        $klass = (new Klass($class_name))
+            ->setStrictTypes(true)
+            ->setFileComment(
+                KlassFileComment::newRaw(sprintf('generated Citrus Dao file at %s', Dates::now()->formatTimestamp()))
+            )
+            ->setNamespace($namespace)
+            ->setClassComment($class_name)
+            ->setExtends($extend_name)
+            ->addProperty(KlassProperty::newProtectedString('sqlmap_path', $sqlmap_path, 'SQLMAP path'));
 
-declare(strict_types=1);
-
-/**
- * generated Citrus Dao file at {#date#}
- */
- 
-namespace {#namespace#}\Integration\Dao;
-
-use Citrus\Sqlmap\Crud;
-
-class {#class_name#}Dao extends Crud
-{
-    /** @var string sqlmap_id */
-    protected \$sqlmap_id = '{#sqlmap_id#}';
-    
-    /** @var string target */
-    protected \$target = '{#table_name#}';
-}
-
-EOT;
-        $sqlmap_id = implode('', array_map(function ($key)
-        {
-            return ucfirst($key);
-        }, explode('_', $table_name)));
-
-        $file_string = str_replace('{#date#}', Dates::now()->formatTimestamp(), $file_string);
-        $file_string = str_replace('{#namespace#}', $this->configures['namespace'], $file_string);
-        $file_string = str_replace('{#class_name#}', $class_name, $file_string);
-        $file_string = str_replace('{#sqlmap_id#}', $sqlmap_id, $file_string);
-        $file_string = str_replace('{#table_name#}', $table_name, $file_string);
-
-        $generate_class_path = sprintf('%s/Dao/%sDao.class.php', $output_dir, $class_name);
-        file_put_contents($generate_class_path, $file_string);
+        $generate_class_path = sprintf('%s/Dao/%s.class.php', $output_dir, $class_name);
+        file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
 
@@ -168,66 +139,55 @@ EOT;
     /**
      * Propertyクラスの生成
      *
-     * @param string $table_name   テーブル名
      * @param string $class_prefix クラス接頭辞
+     * @param string $table_name   テーブル名
      */
-    public function property(string $table_name, string $class_prefix): void
+    public function property(string $class_prefix, string $table_name): void
     {
-        // 生成クラス名
-        $class_name = $class_prefix;
-        // 出力ディレクトリ
-        $output_dir = $this->configures['output_dir'];
         // カラム定義の取得
         $columns = $this->catalogManager->tableColumns($table_name);
         // コメント定義の取得
         $comments = $this->catalogManager->columnComments($table_name);
-        // プライマリキーの取得
-        $primary_keys = $this->catalogManager->primaryKeys($table_name);
         // デフォルトカラム
         $default_columns = array_keys(get_class_vars(Column::class));
+        // プライマリキー文字列
+        $primary_keys = '\'' . implode('\', \'', $this->catalogManager->primaryKeys($table_name)) . '\'';
+        $primary_keys = sprintf('\'%s\'', $primary_keys);
+        $primary_keys = str_replace('\'\'', '', $primary_keys);
 
-        // propertyファイル内容
-        $file_string = <<<EOT
-<?php
+        // 生成クラス名など
+        $namespace = $this->configures['namespace'] . '\\Integration\\Property';
+        $class_name = $class_prefix . 'Property';
+        $extend_name = '\\Citrus\\Database\\Column';
+        $condition_class_path = '\\' . $this->configures['namespace'] . '\\Integration\\Condition\\' . $class_prefix . 'Condition';
 
-declare(strict_types=1);
+        // 出力ディレクトリ
+        $output_dir = $this->configures['output_dir'];
 
-/**
- * generated Citrus Property file at {#date#}
- */
- 
-namespace {#namespace#}\Integration\Property;
-
-use Citrus\Database\Column;
-use {#namespace#}\Integration\Condition\{#class_name#}Condition;
-
-class {#class_name#}Property extends Column
-{
-{#property#}
-
-
-    /**
-     * call primary keys
-     *
-     * @return string[]
-     */
-    public function callPrimaryKeys(): array
-    {
-        return [{#primary_keys#}];
-    }
-
-
-
-    /**
-     * call condition
-     *
-     * @return {#class_name#}Condition
-     */
-    public function callCondition(): {#class_name#}Condition
-    {
-        if (is_null(\$this->condition) === true)
+        // クラス生成
+        $klass = (new Klass($class_name))
+            ->setStrictTypes(true)
+            ->setFileComment(
+                KlassFileComment::newRaw(sprintf('generated Citrus Property file at %s', Dates::now()->formatTimestamp()))
+            )
+            ->setNamespace($namespace)
+            ->setClassComment($class_name)
+            ->setExtends($extend_name)
+            ->addMethod(
+                (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callPrimaryKeys', false, 'call primary keys'))
+                    ->setReturn(new KlassReturn('string[]'))
+                    ->setBody(<<<BODY
+        return [${primary_keys}];
+BODY
+                    )
+            )
+            ->addMethod(
+                (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callCondition', false, 'call condition'))
+                    ->setReturn(new KlassReturn($condition_class_path))
+                    ->setBody(<<<BODY
+        if (true === is_null(\$this->condition))
         {
-            \$this->condition = new {#class_name#}Condition();
+            \$this->condition = new ${condition_class_path}();
             \$this->condition->nullify();
         }
         \$primary_keys = \$this->callPrimaryKeys();
@@ -237,52 +197,29 @@ class {#class_name#}Property extends Column
         }
 
         return \$this->condition;
-    }
-}
+BODY
+                    )
+            );
 
-EOT;
-        $file_string = str_replace('{#date#}', Dates::now()->formatTimestamp(), $file_string);
-        $file_string = str_replace('{#namespace#}', $this->configures['namespace'], $file_string);
-        $file_string = str_replace('{#class_name#}', $class_name, $file_string);
-        $file_string = str_replace('{#primary_keys#}', sprintf('\'%s\'', implode('\', \'', $primary_keys)), $file_string);
-
-        // column property
-        $properties = [];
         foreach ($columns as $column_name => $columnDef)
         {
-            // データ取得
+            // データ型
             $data_type = self::convertToPHPType($columnDef->data_type);
+            // カラム名
             $column_name = $columnDef->column_name;
-            $comment = '';
-            if (true === array_key_exists($column_name, $comments))
-            {
-                $comment = $comments[$column_name]->comment;
-            }
-            $property_name = '$' . $columnDef->column_name;
-
             // デフォルトカラムはスルー
             if (true === in_array($column_name, $default_columns))
             {
                 continue;
             }
-
-            // ベース文字列
-            $property = <<<EOT
-    /** @var {#class_name#} {#comment#} */
-    public {#property_name#};
-
-EOT;
-            // 置換
-            $property = str_replace('{#class_name#}', $data_type, $property);
-            $property = str_replace('{#comment#}', $comment, $property);
-            $property = str_replace('{#property_name#}', $property_name, $property);
-            $properties[] = $property;
+            // コメント
+            $comment = (true === array_key_exists($column_name, $comments) ? $comments[$column_name]->comment : '');
+            // プロパティ追加
+            $klass->addProperty(new KlassProperty($data_type, $column_name, null, $comment));
         }
 
-        $file_string = str_replace('{#property#}', implode(PHP_EOL, $properties), $file_string);
-
-        $generate_class_path = sprintf('%s/Property/%sProperty.class.php', $output_dir, $class_name);
-        file_put_contents($generate_class_path, $file_string);
+        $generate_class_path = sprintf('%s/Property/%s.class.php', $output_dir, $class_name);
+        file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
 
@@ -291,14 +228,14 @@ EOT;
     /**
      * クラスの一括生成
      *
-     * @param string $table_name   テーブル名
      * @param string $class_prefix クラス接頭辞
+     * @param string $table_name   テーブル名
      */
-    public function all(string $table_name, string $class_prefix): void
+    public function all(string $class_prefix, string $table_name): void
     {
-        $this->condition($table_name, $class_prefix);
-        $this->dao($table_name, $class_prefix);
-        $this->property($table_name, $class_prefix);
+        $this->condition($class_prefix);
+        $this->dao($class_prefix, $table_name);
+        $this->property($class_prefix, $table_name);
     }
 
 
@@ -352,6 +289,7 @@ EOT;
      */
     private static function convertToPHPType(string $data_type): string
     {
+        $data_type = strtolower($data_type);
         switch ($data_type)
         {
             case 'character varying':

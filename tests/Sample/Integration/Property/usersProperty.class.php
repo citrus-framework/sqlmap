@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 /**
- * generated Citrus Property file at 2020-06-06 04:26:47
+ * generated Citrus Property file at 2020-06-06 04:31:18
  */
 
 namespace Test\Integration\Property;
 
 /**
- * UserProperty
+ * usersProperty
  */
-class UserProperty extends \Citrus\Database\Column
+class usersProperty extends \Citrus\Database\Column
 {
     /**
      * call primary keys
@@ -28,13 +28,13 @@ class UserProperty extends \Citrus\Database\Column
     /**
      * call condition
      *
-     * @return \Test\Integration\Condition\UserCondition
+     * @return \Test\Integration\Condition\usersCondition
      */
-    public function callCondition(): \Test\Integration\Condition\UserCondition
+    public function callCondition(): \Test\Integration\Condition\usersCondition
     {
         if (true === is_null($this->condition))
         {
-            $this->condition = new \Test\Integration\Condition\UserCondition();
+            $this->condition = new \Test\Integration\Condition\usersCondition();
             $this->condition->nullify();
         }
         $primary_keys = $this->callPrimaryKeys();

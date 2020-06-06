@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2019, CitrusFramework. All Rights Reserved.
+ * @copyright   Copyright 2020, CitrusSqlmap. All Rights Reserved.
  * @author      take64 <take64@citrus.tk>
  * @license     http://www.citrus.tk/
  */
@@ -76,9 +76,10 @@ class Parser
 
     /**
      * Sqlmapのパース
+     *
      * @throws SqlmapException
      */
-    public function parse()
+    public function parse(): void
     {
         // DOMの初期化
         $this->dom = new DOMDocument();
@@ -86,15 +87,13 @@ class Parser
         $this->xpath = new DOMXPath($this->dom);
         $nodeList = $this->xpath->query(sprintf("/sqlMap/*[@id='%s']", $this->statement_id));
         // 見つからない場合
-        if (0 === $nodeList->length)
-        {
-            throw new SqlmapException(sprintf(' Sqlmapファイル「%s」に「%s」の定義がありません', $this->path, $this->statement_id));
-        }
+        SqlmapException::exceptionIf(
+            (0 === $nodeList->length),
+            sprintf(' Sqlmapファイル「%s」に「%s」の定義がありません', $this->path, $this->statement_id));
         // 逆に1つ以上見つかった場合
-        if (1 < $nodeList->length)
-        {
-            throw new SqlmapException(sprintf(' Sqlmapファイル「%s」に「%s」が複数定義されています', $this->path, $this->statement_id));
-        }
+        SqlmapException::exceptionIf(
+            (1 < $nodeList->length),
+            sprintf(' Sqlmapファイル「%s」に「%s」が複数定義されています', $this->path, $this->statement_id));
         $element = $nodeList->item(0);
 
         // ステートメントの生成
@@ -111,7 +110,10 @@ class Parser
         }
         if (false === Strings::isEmpty($this->parameter->schema))
         {
-            $this->statement->query = str_replace('{SCHEMA}', '"'.$this->parameter->schema.'".', $this->statement->query);
+            $this->statement->query = str_replace(
+                '{SCHEMA}',
+                '"' . $this->parameter->schema . '".',
+                $this->statement->query);
         }
         // スキーマ制度がない場合に除去
         $this->statement->query = str_replace('{SCHEMA}', '', $this->statement->query);
@@ -131,7 +133,7 @@ class Parser
             {
                 $match_code = str_replace('#', '', $one);
                 $replace_code = (':' . str_replace('.', '__', $match_code));
-                $parameter_list[$replace_code] = $this->callNestPropertyValue($this->parameter, $match_code);
+                $parameter_list[$replace_code] = $this->callNestPropertyValue($match_code);
                 // パラメータにリテラルではなく配列が入っていた場合
                 if (true === is_array($parameter_list[$replace_code]))
                 {
@@ -162,7 +164,7 @@ class Parser
             foreach ($matches[0] as $one)
             {
                 $match_code = str_replace('$', '', $one);
-                $query = str_replace($one, $this->callNestPropertyValue($this->parameter, $match_code), $query);
+                $query = str_replace($one, $this->callNestPropertyValue($match_code), $query);
             }
         }
 
@@ -182,7 +184,7 @@ class Parser
      * @param Column|null $parameter
      * @deprecated
      */
-    public function replaceParameter(Column $parameter = null)
+    public function replaceParameter(?Column $parameter = null): void
     {
         $keys = array_keys($this->parameter_list);
         foreach ($keys as $key)
@@ -201,7 +203,7 @@ class Parser
      * @param Dynamic|null $dynamic
      * @return string
      */
-    protected function _nodes(DOMNodeList $nodes, Dynamic $dynamic = null): string
+    protected function _nodes(DOMNodeList $nodes, ?Dynamic $dynamic = null): string
     {
         $size = $nodes->length;
         for ($i = 0; $i < $size; $i++)
@@ -226,7 +228,6 @@ class Parser
                 default:
                     $item_node = $this->{'_'.$item->nodeName}($item);
                     $dynamic->concatenate($item_node);
-
             }
         }
         return $dynamic->query;
@@ -317,8 +318,8 @@ class Parser
     protected function _isNull(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
         if (true === is_null($property) or (true === is_string($property) and 'null' === strtolower($property)))
         {
             $dynamic->query = $this->_nodes($element->childNodes);
@@ -337,8 +338,7 @@ class Parser
     protected function _isNotNull(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if (false === is_null($property) or (true === is_string($property) and 'null' !== strtolower($property)))
         {
@@ -359,9 +359,7 @@ class Parser
     protected function _isEmpty(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        // プロパティ値の取得
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         // emptyかどうかなので'empty()'メソッドを使う
         if (true === empty($property))
@@ -383,8 +381,7 @@ class Parser
     protected function _isNotEmpty(DOMElement $element)
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if (false === empty($property))
         {
@@ -405,9 +402,8 @@ class Parser
     protected function _isEqual(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $compare = $this->callCompareObject($dynamic);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if ($property == $compare)
         {
@@ -428,9 +424,8 @@ class Parser
     protected function _isNotEqual(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $compare = $this->callCompareObject($dynamic);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if ($property != $compare)
         {
@@ -451,8 +446,7 @@ class Parser
     protected function _isGreaterThan(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
+        $compare = $this->callCompareObject($dynamic);
 
         if ($compare < $this->parameter->{$dynamic->property})
         {
@@ -473,8 +467,7 @@ class Parser
     protected function _isGreaterEqual(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
+        $compare = $this->callCompareObject($dynamic);
 
         if ($compare <= $this->parameter->{$dynamic->property})
         {
@@ -495,8 +488,7 @@ class Parser
     protected function _isLessThan(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
+        $compare = $this->callCompareObject($dynamic);
 
         if ($compare > $this->parameter->{$dynamic->property})
         {
@@ -517,8 +509,7 @@ class Parser
     protected function _isLessEqual(DOMElement $element)
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $compare = ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
+        $compare = $this->callCompareObject($dynamic);
 
         if ($compare >= $this->parameter->{$dynamic->property})
         {
@@ -539,8 +530,7 @@ class Parser
     protected function _isNumeric(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if (true === is_numeric($property))
         {
@@ -561,8 +551,7 @@ class Parser
     protected function _isDatetime(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if (false === is_null($property) and false !== strtotime($property))
         {
@@ -584,8 +573,7 @@ class Parser
     protected function _isTrue(DOMElement $element): Dynamic
     {
         $dynamic = new Dynamic($element->attributes);
-
-        $property = $this->callNestPropertyValue($this->parameter, $dynamic->property);
+        $property = $this->callNestPropertyValue($dynamic->property);
 
         if (true === $property)
         {
@@ -620,18 +608,30 @@ class Parser
     /**
      * ネストの深いプロパティーを取得する。
      *
-     * @param Column      $parameter ex.) Userオブジェクト
-     * @param string|null $property  ex.) user.condition.user_id
+     * @param string $property  ex.) user.condition.user_id
      * @return mixed ex.) user_idの値
      */
-    private function callNestPropertyValue(Column $parameter, string $property)
+    private function callNestPropertyValue(string $property)
     {
         $properties = explode('.', $property);
-        $result = $parameter;
+        $result = $this->parameter;
         foreach ($properties as $one)
         {
             $result = $result->$one;
         }
         return $result;
+    }
+
+
+
+    /**
+     * 比較プロパティ、もしくは、比較血を取得
+     *
+     * @param Dynamic $dynamic 動的ノード
+     * @return mixed
+     */
+    private function callCompareObject(Dynamic $dynamic)
+    {
+        return ($dynamic->compare_property ? $this->parameter->{$dynamic->compare_property} : $dynamic->compare_value);
     }
 }

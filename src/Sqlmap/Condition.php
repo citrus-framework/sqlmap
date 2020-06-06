@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2017, CitrusFramework. All Rights Reserved.
+ * @copyright   Copyright 2020, CitrusSqlmap. All Rights Reserved.
  * @author      take64 <take64@citrus.tk>
  * @license     http://www.citrus.tk/
  */
@@ -58,7 +58,7 @@ trait Condition
      * @param int|null $page
      * @param int|null $limit
      */
-    public function pageLimit(int $page = 1, int $limit = 10)
+    public function pageLimit(int $page = 1, int $limit = 10): void
     {
         // page
         $this->page = $page;
@@ -77,7 +77,7 @@ trait Condition
      *
      * @param string|array|null $property
      */
-    public function toLike($property = null)
+    public function toLike($property = null): void
     {
         // 配列であれば順次再起
         if (true === is_array($property))
@@ -102,7 +102,7 @@ trait Condition
      *
      * @param string|null $property
      */
-    public function toLikePrefix(string $property = null)
+    public function toLikePrefix(?string $property = null): void
     {
         if (true === is_string($this->$property))
         {
@@ -117,7 +117,7 @@ trait Condition
      *
      * @param string|null $property
      */
-    public function toLikeSuffix(string $property = null)
+    public function toLikeSuffix(?string $property = null): void
     {
         if (true === is_string($this->$property))
         {
@@ -133,7 +133,7 @@ trait Condition
      * @param string|null $property
      * @return string|null
      */
-    public static function like(string $property = null): ?string
+    public static function like(?string $property = null): ?string
     {
         if (true === is_string($property))
         {
@@ -154,15 +154,11 @@ trait Condition
      * @param string|null $property
      * @return string|null
      */
-    public static function likePrefix(string $property = null): ?string
+    public static function likePrefix(?string $property = null): ?string
     {
         if (true === is_string($property))
         {
-            return str_replace(
-                '%%',
-                '%',
-                ('%' . $property)
-            );
+            return str_replace('%%', '%', ('%' . $property));
         }
         return null;
     }
@@ -175,15 +171,11 @@ trait Condition
      * @param string|null $property
      * @return string|null
      */
-    public static function likeSuffix(string $property = null): ?string
+    public static function likeSuffix(?string $property = null): ?string
     {
         if (true === is_string($property))
         {
-            return str_replace(
-                '%%',
-                '%',
-                ($property . '%')
-            );
+            return str_replace('%%', '%', ($property . '%'));
         }
         return null;
     }

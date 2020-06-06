@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2019, CitrusFramework. All Rights Reserved.
+ * @copyright   Copyright 2020, CitrusSqlmap. All Rights Reserved.
  * @author      take64 <take64@citrus.tk>
  * @license     http://www.citrus.tk/
  */
 
 namespace Citrus\Sqlmap\Parser;
 
-use Citrus\Xml;
+use Citrus\Variable\Xmls;
 use DOMNamedNodeMap;
 
 /**
@@ -37,15 +37,15 @@ class Statement
      *
      * @param DOMNamedNodeMap|null $attributes
      */
-    public function __construct(DOMNamedNodeMap $attributes = null)
+    public function __construct(?DOMNamedNodeMap $attributes = null)
     {
         if (true === is_null($attributes))
         {
             return;
         }
 
-        $this->id = Xml::getNamedItemValue($attributes, 'id');
-        $this->result_class = Xml::getNamedItemValue($attributes, 'resultClass');
-        $this->parameter_class = Xml::getNamedItemValue($attributes, 'parameterClass');
+        $this->id = Xmls::getNamedItemValue($attributes, 'id');
+        $this->result_class = Xmls::getNamedItemValue($attributes, 'resultClass');
+        $this->parameter_class = Xmls::getNamedItemValue($attributes, 'parameterClass');
     }
 }

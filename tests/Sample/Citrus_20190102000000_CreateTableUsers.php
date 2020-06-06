@@ -8,14 +8,12 @@ declare(strict_types=1);
  * @license     http://www.citrus.tk/
  */
 
-namespace Test\Sample;
-
 use Citrus\Migration\Item;
 
 /**
  * テスト用マイグレーションクラス
  */
-class Citrus_20190101000000_CreateTableUsers extends Item
+class Citrus_20190102000000_CreateTableUsers extends Item
 {
     /** @var string object name */
     public $object_name = 'users';

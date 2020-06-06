@@ -47,19 +47,19 @@ class GenerateCommand extends Console
         {
             // Property生成処理
             case Generate::TYPE_PROPERTY:
-                $generate->property($table_name, $class_prefix);
+                $generate->property($class_prefix, $table_name);
                 break;
             // Dao生成処理
             case Generate::TYPE_DAO:
-                $generate->dao($table_name, $class_prefix);
+                $generate->dao($class_prefix, $table_name);
                 break;
             // Condition生成処理
             case Generate::TYPE_CONDITION:
-                $generate->condition($table_name, $class_prefix);
+                $generate->condition($class_prefix);
                 break;
             // Property,Dao,Condition生成処理
             case Generate::TYPE_ALL:
-                $generate->all($table_name, $class_prefix);
+                $generate->all($class_prefix, $table_name);
                 break;
             default:
         }

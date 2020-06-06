@@ -42,7 +42,7 @@ class GenerateTest extends TestCase
         parent::setUp();
 
         // 出力ディレクトリ
-        $this->output_dir = __DIR__ . '/Integration';
+        $this->output_dir = __DIR__ . '/../Sample/Integration';
         $this->sqlite_file = $this->output_dir . '/test.sqlite';
 
         // 設定配列
@@ -81,7 +81,7 @@ class GenerateTest extends TestCase
         parent::tearDown();
 
         // ディレクトリがあったら削除
-        $this->forceRemove($this->output_dir);
+//        $this->forceRemove($this->output_dir);
     }
 
 
@@ -108,7 +108,7 @@ class GenerateTest extends TestCase
     public function 各種ファイルを生成できる()
     {
         // テーブル生成
-        $name = 'CreateTableUsers';
+        $name = '20190102000000';
         $migration = Migration::sharedInstance()->loadConfigures($this->configures);
         $migration->up($name);
 
