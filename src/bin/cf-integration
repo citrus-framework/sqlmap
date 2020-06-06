@@ -1,0 +1,49 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @copyright   Copyright 2020, CitrusGeneration. All Rights Reserved.
+ * @author      take64 <take64@citrus.tk>
+ * @license     http://www.citrus.tk/
+ */
+/**
+ * sample :
+ *
+./bin/migration.sh --directory=../medica6.project.tk --action=decoy
+./bin/migration.sh --directory=../medica6.project.tk --action=generate --name=CreateTableActors
+./bin/migration.sh --directory=../medica6.project.tk --action=up
+./bin/migration.sh --directory=../medica6.project.tk --action=up --version=20170717031426
+ */
+
+// search directory
+$current_dirs = explode('/', dir(__DIR__)->path);
+$paths = [];
+foreach ($current_dirs as $row)
+{
+    // vendorまで来たらストップ
+    if ('vendor' === $row)
+    {
+        break;
+    }
+    $paths[] = $row;
+}
+
+
+// autoload
+$autoload_paths = $paths;
+$autoload_paths[] = 'vendor';
+$autoload_paths[] = 'autoload.php';
+$autoload_path = implode('/', $autoload_paths);
+require $autoload_path;
+
+// configure
+$configure_paths = $paths;
+$configure_paths[] = 'citrus-configure.php';
+$configure_path = implode('/', $configure_paths);
+$configures = include($configure_path);
+
+// run!
+Citrus\Citrus::initialize();
+Citrus\Database\GenerateCommand::runner($configures);
