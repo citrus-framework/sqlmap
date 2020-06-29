@@ -14,6 +14,7 @@ use Citrus\Database\Connection\Connection;
 use Citrus\Database\Connection\ConnectionPool;
 use Citrus\Database\DatabaseException;
 use Citrus\Database\ResultSet\ResultSet;
+use PDOStatement;
 
 /**
  * SQLMAPのSQL実行クライアント
@@ -69,7 +70,7 @@ class Client
      * @return ResultSet
      * @throws SqlmapException
      */
-    public function select(Parser $parser): ResultSet
+    public function selectQuery(Parser $parser): ResultSet
     {
         // プリペアとパラメータ設定
         $statement = $this->prepareAndBind($parser);
@@ -86,7 +87,7 @@ class Client
      * @return int
      * @throws SqlmapException
      */
-    public function insert(Parser $parser): int
+    public function insertQuery(Parser $parser): int
     {
         // プリペアとパラメータ設定
         $statement = $this->prepareAndBind($parser);
@@ -106,7 +107,7 @@ class Client
      * @return int
      * @throws SqlmapException
      */
-    public function update(Parser $parser): int
+    public function updateQuery(Parser $parser): int
     {
         // プリペアとパラメータ設定
         $statement = $this->prepareAndBind($parser);
@@ -126,7 +127,7 @@ class Client
      * @return int
      * @throws SqlmapException
      */
-    public function delete(Parser $parser): int
+    public function deleteQuery(Parser $parser): int
     {
         // 削除全実行はフレームワークとして許容しない(全実行する場合は条件を明示的につける ex.)WHERE 1=1)
         SqlmapException::exceptionIf((0 === count($parser->parameter_list)), '削除条件が足りません、削除要求をキャンセルしました。');
@@ -163,10 +164,10 @@ class Client
      * プリペアとパラメータ設定
      *
      * @param Parser $parser
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws SqlmapException
      */
-    private function prepareAndBind(Parser $parser): \PDOStatement
+    private function prepareAndBind(Parser $parser): PDOStatement
     {
         // ハンドル
         $handle = null;
