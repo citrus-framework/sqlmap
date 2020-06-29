@@ -74,7 +74,7 @@ class Crud extends Client
      * @return int
      * @throws SqlmapException
      */
-    public function modify(Column $entity): int
+    public function update(Column $entity): int
     {
         // 全変更の危険を回避
         if (false === $this->validateEssentialModify($entity))
@@ -82,7 +82,7 @@ class Crud extends Client
             return 0;
         }
 
-        $parser = Parser::generate($this->sqlmap_path, 'modify', $entity, $this->connection->dsn);
+        $parser = Parser::generate($this->sqlmap_path, 'update', $entity, $this->connection->dsn);
         return $this->updateQuery($parser);
     }
 

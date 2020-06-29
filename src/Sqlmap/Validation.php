@@ -18,7 +18,7 @@ use Citrus\Database\Column;
 trait Validation
 {
     /**
-     * modify実行時の必須チェック
+     * update実行時の必須チェック
      *
      * @param Column $entity
      * @return bool

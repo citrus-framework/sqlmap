@@ -152,7 +152,7 @@ class ParserTest extends TestCase
         $entity->user_id = 3;
         $entity->name = 'sansan';
         $entity->getCondition()->user_id = 2;
-        $dao->modify($entity);
+        $dao->update($entity);
         // 再取得
         $resultSet = $dao->summary(new UserCondition());
         // 件数チェック
