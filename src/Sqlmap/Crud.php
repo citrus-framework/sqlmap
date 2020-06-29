@@ -59,7 +59,7 @@ class Crud extends Client
      * @return int
      * @throws SqlmapException
      */
-    public function regist(Column $entity): int
+    public function create(Column $entity): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'create', $entity, $this->connection->dsn);
         return $this->insertQuery($parser);

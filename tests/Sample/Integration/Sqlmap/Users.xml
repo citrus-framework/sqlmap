@@ -75,7 +75,7 @@
         </dynamic>
     </select>
     
-    <insert id="regist" parameterClass="\Test\Sample\Business\Entity\UserEntity">
+    <insert id="create" parameterClass="\Test\Sample\Business\Entity\UserEntity">
     INSERT INTO {SCHEMA}users
     (
         <dynamic>
