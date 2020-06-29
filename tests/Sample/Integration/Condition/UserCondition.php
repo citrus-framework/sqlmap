@@ -1,14 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * generated Citrus Condition file at 2018-03-30 06:47:18
+ * generated Citrus Condition file at 2020-06-29 14:39:12
  */
- 
+
 namespace Test\Sample\Integration\Condition;
 
-use Citrus\Sqlmap\Condition;
-use Test\Sample\Integration\Property\UserProperty;
-
-class UserCondition extends UserProperty
+/**
+ * UserCondition
+ */
+class UserCondition extends \Test\Sample\Integration\Property\UserProperty
 {
-    use Condition;
+    use \Citrus\Sqlmap\Condition;
 }
