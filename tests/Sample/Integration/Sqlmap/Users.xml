@@ -98,7 +98,7 @@
     )
     </insert>
 
-    <update id="modify" parameterClass="\Test\Sample\Business\Entity\UserEntity">
+    <update id="update" parameterClass="\Test\Sample\Business\Entity\UserEntity">
         UPDATE {SCHEMA}users
         <dynamic prepend="SET">
                 rev = rev + 1
