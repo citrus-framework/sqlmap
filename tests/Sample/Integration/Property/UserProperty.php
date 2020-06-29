@@ -1,19 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * generated Citrus Property file at 2018-03-27 02:43:01
+ * generated Citrus Property file at 2020-06-29 14:39:12
  */
 
 namespace Test\Sample\Integration\Property;
 
-use Citrus\Database\Column;
-use Test\Sample\Integration\Condition\UserCondition;
-
-class UserProperty extends Column
+/**
+ * UserProperty
+ */
+class UserProperty extends \Citrus\Database\Column
 {
-    /** @var int ユーザーID */
+    /** @var int  */
     public $user_id;
 
-    /** @var string 名前 */
+    /** @var string  */
     public $name;
 
 
@@ -23,9 +26,9 @@ class UserProperty extends Column
      *
      * @return string[]
      */
-    public function callPrimaryKeys() : array
+    public function callPrimaryKeys(): array
     {
-        return ['user_id'];
+        return [user_id];
     }
 
 
@@ -33,13 +36,13 @@ class UserProperty extends Column
     /**
      * call condition
      *
-     * @return UserCondition
+     * @return \Test\Sample\Integration\Condition\UserCondition
      */
-    public function callCondition() : UserCondition
+    public function callCondition(): \Test\Sample\Integration\Condition\UserCondition
     {
         if (true === is_null($this->condition))
         {
-            $this->condition = new UserCondition();
+            $this->condition = new \Test\Sample\Integration\Condition\UserCondition();
             $this->condition->nullify();
         }
         $primary_keys = $this->callPrimaryKeys();

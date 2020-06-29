@@ -64,7 +64,6 @@ class ParserTest extends TestCase
                 'database' => $database,
             ],
         ];
-
         // ディレクトリ生成
         mkdir($this->output_dir);
         chmod($this->output_dir, 0755);
@@ -132,7 +131,7 @@ class ParserTest extends TestCase
         $entity = new UserEntity();
         $entity->user_id = 3;
         $entity->name = 'sansan';
-        $dao->regist($entity);
+        $dao->create($entity);
         // 再取得
         $resultSet = $dao->summary(new UserCondition());
         // 件数チェック

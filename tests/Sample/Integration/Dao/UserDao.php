@@ -3,19 +3,16 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2019, Citrus All Rights Reserved.
- * @author      take64 <take64@citrus.tk>
- * @license     http://www.besidesplus.net/
+ * generated Citrus Dao file at 2020-06-29 14:39:12
  */
 
 namespace Test\Sample\Integration\Dao;
 
-use Citrus\Sqlmap\Faces;
-
 /**
- * ユーザーデータアクセス
+ * UserDao
  */
-class UserDao extends Faces
+class UserDao extends \Citrus\Sqlmap\Crud
 {
+    /** @var string SQLMAP path */
     protected $sqlmap_path = __DIR__ . '/../Sqlmap/Users.xml';
 }

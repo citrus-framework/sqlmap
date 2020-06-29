@@ -36,7 +36,7 @@ class Faces extends Crud
     public function facesSelection(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'facesSelection', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 
 
@@ -51,7 +51,7 @@ class Faces extends Crud
     public function facesSummary(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'facesSummary', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 
 
@@ -66,7 +66,7 @@ class Faces extends Crud
     public function facesDetail(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'facesDetail', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 
 
@@ -82,7 +82,7 @@ class Faces extends Crud
     {
         $parser = Parser::generate($this->sqlmap_path, 'count', $condition, $this->connection->dsn);
         /** @var Result $result */
-        $result = $this->select($parser)->one();
+        $result = $this->selectQuery($parser)->one();
         return (true === is_null($result) ? 0 : $result->count);
     }
 
@@ -98,6 +98,6 @@ class Faces extends Crud
     public function name(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'name', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 }

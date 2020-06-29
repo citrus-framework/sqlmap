@@ -75,15 +75,15 @@
         </dynamic>
     </select>
     
-    <insert id="regist" parameterClass="\Test\Sample\Business\Entity\UserEntity">
+    <insert id="create" parameterClass="\Test\Sample\Business\Entity\UserEntity">
     INSERT INTO {SCHEMA}users
     (
         <dynamic>
             <isNotEmpty prepend="," property="user_id">     user_id     </isNotEmpty>
             <isNotNull  prepend="," property="name">        name        </isNotNull>
             <isNotNull  prepend="," property="status">      status      </isNotNull>
-            <isNotNull  prepend="," property="created_at">  created_at </isNotNull>
-            <isNotNull  prepend="," property="updated_at">  updated_at </isNotNull>
+            <isNotNull  prepend="," property="created_at">  created_at  </isNotNull>
+            <isNotNull  prepend="," property="updated_at">  updated_at  </isNotNull>
        </dynamic>
     )
     VALUES
@@ -92,8 +92,8 @@
             <isNotEmpty prepend="," property="user_id">     #user_id#       </isNotEmpty>
             <isNotNull  prepend="," property="name">        #name#          </isNotNull>
             <isNotNull  prepend="," property="status">      #status#        </isNotNull>
-            <isNotNull  prepend="," property="created_at">  #created_at#   </isNotNull>
-            <isNotNull  prepend="," property="updated_at">  #updated_at#   </isNotNull>
+            <isNotNull  prepend="," property="created_at">  #created_at#    </isNotNull>
+            <isNotNull  prepend="," property="updated_at">  #updated_at#    </isNotNull>
         </dynamic>
     )
     </insert>

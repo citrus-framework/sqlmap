@@ -32,7 +32,7 @@ class Crud extends Client
     public function summary(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'summary', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 
 
@@ -47,7 +47,7 @@ class Crud extends Client
     public function detail(Column $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'detail', $condition, $this->connection->dsn);
-        return $this->select($parser);
+        return $this->selectQuery($parser);
     }
 
 
@@ -59,10 +59,10 @@ class Crud extends Client
      * @return int
      * @throws SqlmapException
      */
-    public function regist(Column $entity): int
+    public function create(Column $entity): int
     {
-        $parser = Parser::generate($this->sqlmap_path, 'regist', $entity, $this->connection->dsn);
-        return $this->insert($parser);
+        $parser = Parser::generate($this->sqlmap_path, 'create', $entity, $this->connection->dsn);
+        return $this->insertQuery($parser);
     }
 
 
@@ -83,7 +83,7 @@ class Crud extends Client
         }
 
         $parser = Parser::generate($this->sqlmap_path, 'modify', $entity, $this->connection->dsn);
-        return $this->update($parser);
+        return $this->updateQuery($parser);
     }
 
 
@@ -98,6 +98,6 @@ class Crud extends Client
     public function remove(Column $condition): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'remove', $condition, $this->connection->dsn);
-        return $this->delete($parser);
+        return $this->deleteQuery($parser);
     }
 }
