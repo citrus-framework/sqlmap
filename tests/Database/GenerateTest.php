@@ -66,7 +66,7 @@ class GenerateTest extends TestCase
                 'mode' => 0755,
                 'owner' => posix_getpwuid(posix_geteuid())['name'],
                 'group' => posix_getgrgid(posix_getegid())['name'],
-                'namespace' => 'Test',
+                'namespace' => 'Test\\Sample',
             ],
         ];
     }
@@ -114,11 +114,11 @@ class GenerateTest extends TestCase
 
         // ファイル生成
         $generate = Generate::sharedInstance()->loadConfigures($this->configures);
-        $generate->all('users', 'User');
+        $generate->all('User', 'users');
 
         // ファイル生成されている
-        $this->assertTrue(file_exists($this->output_dir . '/Condition/UserCondition.class.php'));
-        $this->assertTrue(file_exists($this->output_dir . '/Dao/UserDao.class.php'));
-        $this->assertTrue(file_exists($this->output_dir . '/Property/UserProperty.class.php'));
+        $this->assertTrue(file_exists($this->output_dir . '/Condition/UserCondition.php'));
+        $this->assertTrue(file_exists($this->output_dir . '/Dao/UserDao.php'));
+        $this->assertTrue(file_exists($this->output_dir . '/Property/UserProperty.php'));
     }
 }

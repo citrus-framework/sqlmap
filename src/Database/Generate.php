@@ -80,7 +80,7 @@ class Generate extends Configurable
         // 生成クラス名など
         $namespace = $this->configures['namespace'] . '\\Integration\\Condition';
         $class_name = $class_prefix . 'Condition';
-        $extend_name = '\\' . $namespace . '\\Integration\\Property\\' . $class_prefix . 'Property';
+        $extend_name = '\\' . $this->configures['namespace'] . '\\Integration\\Property\\' . $class_prefix . 'Property';
         // 出力ディレクトリ
         $output_dir = $this->configures['output_dir'];
 
@@ -95,7 +95,7 @@ class Generate extends Configurable
             ->setExtends($extend_name)
             ->addTrait(new KlassTrait('\\Citrus\\Sqlmap\\Condition'));
 
-        $generate_class_path = sprintf('%s/Condition/%s.class.php', $output_dir, $class_name);
+        $generate_class_path = sprintf('%s/Condition/%s.php', $output_dir, $class_name);
         file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
@@ -129,7 +129,7 @@ class Generate extends Configurable
             ->setExtends($extend_name)
             ->addProperty(KlassProperty::newProtectedString('sqlmap_path', $sqlmap_path, 'SQLMAP path'));
 
-        $generate_class_path = sprintf('%s/Dao/%s.class.php', $output_dir, $class_name);
+        $generate_class_path = sprintf('%s/Dao/%s.php', $output_dir, $class_name);
         file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
@@ -218,7 +218,7 @@ BODY
             $klass->addProperty(new KlassProperty($data_type, $column_name, null, $comment));
         }
 
-        $generate_class_path = sprintf('%s/Property/%s.class.php', $output_dir, $class_name);
+        $generate_class_path = sprintf('%s/Property/%s.php', $output_dir, $class_name);
         file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
