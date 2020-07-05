@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * generated Citrus Property file at 2020-06-29 14:39:12
+ * generated Citrus Property file at 2020-07-05 14:54:31
  */
 
 namespace Test\Sample\Integration\Property;

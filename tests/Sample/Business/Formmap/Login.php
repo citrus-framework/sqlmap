@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * @copyright   Copyright 2019, Citrus All Rights Reserved.
+ * @copyright   Copyright 2020, CitrusSqlmap. All Rights Reserved.
  * @author      take64 <take64@citrus.tk>
  * @license     http://www.besidesplus.net/
  */

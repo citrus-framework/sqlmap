@@ -17,6 +17,7 @@
     "citrus-framework/configure": "^1.0",
     "citrus-framework/database": "^1.0",
     "citrus-framework/generation": "^1.0",
+    "citrus-framework/intersection": "^1.0",
     "ext-posix": "*",
     "ext-dom": "*",
     "ext-pdo": "*"
