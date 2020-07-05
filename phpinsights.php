@@ -52,8 +52,8 @@ return [
             'space' => 'none',
         ],
         PhpCsFixer\Fixer\Basic\BracesFixer::class => [
-            'allow_single_line_closure' => false,
-            'position_after_anonymous_constructs' => 'next',
+            'allow_single_line_closure' => true,
+            'position_after_anonymous_constructs' => 'same',
             'position_after_control_structures' => 'next',
             'position_after_functions_and_oop_constructs' => 'next',
         ],
