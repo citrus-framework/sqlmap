@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Citrus\Sqlmap;
 
 use Citrus\Database\Column;
+use Citrus\Database\Result;
 use Citrus\Database\ResultSet\ResultSet;
 
 /**
@@ -48,6 +49,23 @@ class Crud extends Client
     {
         $parser = Parser::generate($this->sqlmap_path, 'detail', $condition, $this->connection->dsn);
         return $this->selectQuery($parser);
+    }
+
+
+
+    /**
+     * 件数クエリの実行結果
+     *
+     * @param Column $condition
+     * @return int
+     * @throws SqlmapException
+     */
+    public function count(Column $condition): int
+    {
+        $parser = Parser::generate($this->sqlmap_path, 'count', $condition, $this->connection->dsn);
+        /** @var Result $result */
+        $result = $this->selectQuery($parser)->one();
+        return $result->count;
     }
 
 
