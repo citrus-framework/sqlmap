@@ -149,7 +149,7 @@ class Generate extends Configurable
         // コメント定義の取得
         $comments = $this->catalogManager->columnComments($table_name);
         // デフォルトカラム
-        $default_columns = array_keys(get_class_vars(Column::class));
+        $default_columns = array_keys(get_class_vars(Columns::class));
         // プライマリキー文字列
         $primary_keys = '\'' . implode('\', \'', $this->catalogManager->primaryKeys($table_name)) . '\'';
         $primary_keys = sprintf('\'%s\'', $primary_keys);
@@ -158,7 +158,7 @@ class Generate extends Configurable
         // 生成クラス名など
         $namespace = $this->configures['namespace'] . '\\Integration\\Property';
         $class_name = $class_prefix . 'Property';
-        $extend_name = '\\Citrus\\Database\\Column';
+        $extend_name = '\\Citrus\\Database\\Columns';
         $condition_class_path = '\\' . $this->configures['namespace'] . '\\Integration\\Condition\\' . $class_prefix . 'Condition';
 
         // 出力ディレクトリ

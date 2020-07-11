@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus\Sqlmap;
 
-use Citrus\Database\Column;
+use Citrus\Database\Columns;
 use Citrus\Database\DSN;
 use Citrus\Sqlmap\Parser\Dynamic;
 use Citrus\Sqlmap\Parser\Statement;
@@ -37,7 +37,7 @@ class Parser
     /** @var DOMXPath dom xpath */
     private $xpath;
 
-    /** @var Column parameter */
+    /** @var Columns parameter */
     private $parameter;
 
     /** @var string Sqlmapのパス */
@@ -54,14 +54,14 @@ class Parser
     /**
      * パースして結果を取得
      *
-     * @param string $sqlmap_path  Sqlmapのパス
-     * @param string $statement_id Sqlmap内の対象ID
-     * @param Column $parameter    受付パラメタ
-     * @param DSN    $dsn          DSN情報
+     * @param string  $sqlmap_path  Sqlmapのパス
+     * @param string  $statement_id Sqlmap内の対象ID
+     * @param Columns $parameter    受付パラメタ
+     * @param DSN     $dsn          DSN情報
      * @return Parser
      * @throws SqlmapException
      */
-    public static function generate(string $sqlmap_path, string $statement_id, Column $parameter, DSN $dsn): Parser
+    public static function generate(string $sqlmap_path, string $statement_id, Columns $parameter, DSN $dsn): Parser
     {
         $self = new self();
         $self->path = $sqlmap_path;
@@ -181,10 +181,10 @@ class Parser
     /**
      * replace sqlmap parameter
      *
-     * @param Column|null $parameter
+     * @param Columns|null $parameter
      * @deprecated
      */
-    public function replaceParameter(?Column $parameter = null): void
+    public function replaceParameter(?Columns $parameter = null): void
     {
         $keys = array_keys($this->parameter_list);
         foreach ($keys as $key)

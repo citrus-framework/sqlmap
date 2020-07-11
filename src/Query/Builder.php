@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
-use Citrus\Database\Column;
+use Citrus\Database\Columns;
 use Citrus\Database\Connection\Connection;
 use Citrus\Database\Executor;
 use Citrus\Database\QueryPack;
@@ -67,12 +67,12 @@ class Builder
     /**
      * build select statement
      *
-     * @param string      $table_name
-     * @param Column|null $condition
-     * @param array|null  $columns
+     * @param string       $table_name
+     * @param Columns|null $condition
+     * @param array|null   $columns
      * @return Builder
      */
-    public function select(string $table_name, Column $condition = null, array $columns = null): Builder
+    public function select(string $table_name, Columns $condition = null, array $columns = null): Builder
     {
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_SELECT;
@@ -154,11 +154,11 @@ class Builder
     /**
      * build insert statement
      *
-     * @param string $table_name
-     * @param Column $value
+     * @param string  $table_name
+     * @param Columns $value
      * @return Builder
      */
-    public function insert(string $table_name, Column $value): Builder
+    public function insert(string $table_name, Columns $value): Builder
     {
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_INSERT;
@@ -209,12 +209,12 @@ class Builder
     /**
      * build update statement
      *
-     * @param string $table_name
-     * @param Column $value
-     * @param Column $condition
+     * @param string  $table_name
+     * @param Columns $value
+     * @param Columns $condition
      * @return Builder
      */
-    public function update(string $table_name, Column $value, Column $condition): Builder
+    public function update(string $table_name, Columns $value, Columns $condition): Builder
     {
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_UPDATE;
@@ -279,11 +279,11 @@ class Builder
     /**
      * build delete statement
      *
-     * @param string $table_name
-     * @param Column $condition
+     * @param string  $table_name
+     * @param Columns $condition
      * @return Builder
      */
-    public function delete(string $table_name, Column $condition): Builder
+    public function delete(string $table_name, Columns $condition): Builder
     {
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_UPDATE;
@@ -331,7 +331,7 @@ class Builder
      * execute
      *
      * @param string|null $result_class
-     * @return array|bool|Column[]|null|ResultSet
+     * @return array|bool|Columns[]|null|ResultSet
      */
     public function execute(string $result_class = null)
     {

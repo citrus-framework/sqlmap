@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus\Sqlmap;
 
-use Citrus\Database\Column;
+use Citrus\Database\Columns;
 
 /**
  * Sqlmapのバリデーション
@@ -20,11 +20,11 @@ trait Validation
     /**
      * update実行時の必須チェック
      *
-     * @param Column $entity
+     * @param Columns $entity
      * @return bool
      * @throws SqlmapException
      */
-    public function validateEssentialModify(Column $entity): bool
+    public function validateEssentialModify(Columns $entity): bool
     {
         // 全変更の危険を回避
         if (0 === count(get_object_vars($entity->getCondition())))
