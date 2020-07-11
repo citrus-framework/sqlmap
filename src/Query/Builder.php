@@ -328,19 +328,19 @@ class Builder
         return Intersection::fetch($this->query_type, [
             // select
             self::QUERY_TYPE_SELECT => function () use ($queryPack) {
-                return (new Executor($this->connection))->select($queryPack);
+                return (new Executor($this->connection))->selectQuery($queryPack);
             },
             // insert
             self::QUERY_TYPE_INSERT => function () use ($queryPack) {
-                return (new Executor($this->connection))->insert($queryPack);
+                return (new Executor($this->connection))->insertQuery($queryPack);
             },
             // update
             self::QUERY_TYPE_UPDATE => function () use ($queryPack) {
-                return (new Executor($this->connection))->update($queryPack);
+                return (new Executor($this->connection))->updateQuery($queryPack);
             },
             // delete
             self::QUERY_TYPE_DELETE => function () use ($queryPack) {
-                return (new Executor($this->connection))->delete($queryPack);
+                return (new Executor($this->connection))->deleteQuery($queryPack);
             },
         ], true);
     }

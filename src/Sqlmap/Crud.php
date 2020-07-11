@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Citrus\Sqlmap;
 
 use Citrus\Database\Columns;
+use Citrus\Database\DatabaseException;
 use Citrus\Database\Result;
 use Citrus\Database\ResultSet\ResultSet;
 
@@ -33,7 +34,14 @@ class Crud extends Client
     public function summary(Columns $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'summary', $condition, $this->connection->dsn);
-        return $this->selectQuery($parser);
+        try
+        {
+            return $this->selectQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -48,7 +56,14 @@ class Crud extends Client
     public function detail(Columns $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'detail', $condition, $this->connection->dsn);
-        return $this->selectQuery($parser);
+        try
+        {
+            return $this->selectQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -63,9 +78,16 @@ class Crud extends Client
     public function count(Columns $condition): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'count', $condition, $this->connection->dsn);
-        /** @var Result $result */
-        $result = $this->selectQuery($parser)->one();
-        return $result->count;
+        try
+        {
+            /** @var Result $result */
+            $result = $this->selectQuery($parser->toPack())->one();
+            return $result->count;
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -80,7 +102,14 @@ class Crud extends Client
     public function create(Columns $entity): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'create', $entity, $this->connection->dsn);
-        return $this->insertQuery($parser);
+        try
+        {
+            return $this->insertQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -101,7 +130,14 @@ class Crud extends Client
         }
 
         $parser = Parser::generate($this->sqlmap_path, 'update', $entity, $this->connection->dsn);
-        return $this->updateQuery($parser);
+        try
+        {
+            return $this->updateQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -116,6 +152,13 @@ class Crud extends Client
     public function remove(Columns $condition): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'remove', $condition, $this->connection->dsn);
-        return $this->deleteQuery($parser);
+        try
+        {
+            return $this->deleteQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 }

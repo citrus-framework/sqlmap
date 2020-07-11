@@ -12,6 +12,7 @@ namespace Citrus\Sqlmap;
 
 use Citrus\Database\Columns;
 use Citrus\Database\DSN;
+use Citrus\Database\QueryPack;
 use Citrus\Sqlmap\Parser\Dynamic;
 use Citrus\Sqlmap\Parser\Statement;
 use Citrus\Variable\Strings;
@@ -192,6 +193,18 @@ class Parser
             $column_key = str_replace(':', '', $key);
             $this->parameter_list[$key] = $parameter->get($column_key);
         }
+    }
+
+
+
+    /**
+     * クエリパックに変換
+     *
+     * @return QueryPack
+     */
+    public function toPack(): QueryPack
+    {
+        return QueryPack::pack($this->statement->query, $this->parameter_list, $this->statement->result_class);
     }
 
 
