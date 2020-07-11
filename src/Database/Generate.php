@@ -87,9 +87,9 @@ class Generate extends Configurable
         // クラス生成
         $klass = (new Klass($class_name))
             ->setStrictTypes(true)
-            ->setFileComment(
-                KlassFileComment::newRaw(sprintf('generated Citrus Condition file at %s', Dates::now()->formatTimestamp()))
-            )
+            ->setFileComment(KlassFileComment::newRaw(
+                sprintf('generated Citrus Condition file at %s', Dates::now()->formatTimestamp())
+            ))
             ->setNamespace($namespace)
             ->setClassComment($class_name)
             ->setExtends($extend_name)
@@ -167,9 +167,9 @@ class Generate extends Configurable
         // クラス生成
         $klass = (new Klass($class_name))
             ->setStrictTypes(true)
-            ->setFileComment(
-                KlassFileComment::newRaw(sprintf('generated Citrus Property file at %s', Dates::now()->formatTimestamp()))
-            )
+            ->setFileComment(KlassFileComment::newRaw(
+                sprintf('generated Citrus Property file at %s', Dates::now()->formatTimestamp())
+            ))
             ->setNamespace($namespace)
             ->setClassComment($class_name)
             ->setExtends($extend_name)

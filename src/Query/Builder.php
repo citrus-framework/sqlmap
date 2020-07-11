@@ -26,17 +26,17 @@ class Builder
 {
     use Optimize;
 
-    /** query type select */
-    const QUERY_TYPE_SELECT = 'select';
+    /** @var string query type select */
+    public const QUERY_TYPE_SELECT = 'select';
 
-    /** query type insert */
-    const QUERY_TYPE_INSERT = 'insert';
+    /** @var string query type insert */
+    public const QUERY_TYPE_INSERT = 'insert';
 
-    /** query type update */
-    const QUERY_TYPE_UPDATE = 'update';
+    /** @var string query type update */
+    public const QUERY_TYPE_UPDATE = 'update';
 
-    /** query type delete */
-    const QUERY_TYPE_DELETE = 'delete';
+    /** @var string query type delete */
+    public const QUERY_TYPE_DELETE = 'delete';
 
     /** @var Statement $statement */
     public $statement = null;
@@ -65,7 +65,7 @@ class Builder
 
 
     /**
-     * build select statement
+     * SELECT文の生成
      *
      * @param string       $table_name
      * @param Columns|null $condition
@@ -77,22 +77,16 @@ class Builder
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_SELECT;
 
-        // ステートメント
-        $this->statement = new Statement();
-
         // カラム列挙
         $select_context = (true === is_array($columns) ? implode(', ', $columns) : '*');
 
         // テーブル名
-        if (false === is_null($condition->schema))
-        {
-            $table_name .= sprintf('%s.%s', $condition->schema, $table_name);
-        }
+        $table_name = $this->tableNameWithSchema($table_name, $condition);
         // ベースクエリー
         $query = sprintf('SELECT %s FROM %s', $select_context, $table_name);
 
         // 検索条件,取得条件
-        $_parameters = [];
+        $parameters = [];
         if (false === is_null($condition))
         {
             // 検索条件
@@ -107,17 +101,17 @@ class Builder
 
                 $bind_ky = sprintf(':%s', $ky);
                 $wheres[] = sprintf('%s = %s', $ky, $bind_ky);
-                $_parameters[$bind_ky] = $vl;
+                $parameters[$bind_ky] = $vl;
             }
             // 検索条件がある場合
-            if (false === empty($wheres))
+            if (0 < count($wheres))
             {
                 $query = sprintf('%s WHERE %s', $query, implode(' AND ', $wheres));
             }
 
             // 取得条件
             $condition_traits = class_uses($condition);
-            if (true === array_key_exists('CitrusSqlmapCondition', $condition_traits))
+            if (true === array_key_exists('Condition', $condition_traits))
             {
                 /** @var Condition $condition */
 
@@ -132,19 +126,21 @@ class Builder
                 {
                     $ky = 'limit';
                     $query = sprintf('%s LIMIT :%s', $query, $ky);
-                    $_parameters[$ky] = $condition->limit;
+                    $parameters[$ky] = $condition->limit;
                 }
-                if (is_null($condition->offset) === false)
+                if (false === is_null($condition->offset))
                 {
                     $ky = 'offset';
                     $query = sprintf('%s OFFSET :%s', $query, $ky);
-                    $_parameters[$ky] = $condition->offset;
+                    $parameters[$ky] = $condition->offset;
                 }
             }
         }
 
+        // ステートメント
+        $this->statement = new Statement();
         $this->statement->query = $query;
-        $this->parameters = $_parameters;
+        $this->parameters = $parameters;
 
         return $this;
     }
@@ -152,7 +148,7 @@ class Builder
 
 
     /**
-     * build insert statement
+     * INSERT文の生成
      *
      * @param string  $table_name
      * @param Columns $value
@@ -163,16 +159,13 @@ class Builder
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_INSERT;
 
-        // ステートメント
-        $this->statement = new Statement();
-
         // 自動補完
         $value->completeCreateColumn();
 
         // 登録情報
         $columns = [];
-        $_parameters = [];
         $properties = $value->properties();
+        $parameters = [];
         foreach ($properties as $ky => $vl)
         {
             if (true === is_null($vl))
@@ -182,14 +175,11 @@ class Builder
 
             $bind_ky = sprintf(':%s', $ky);
             $columns[$ky] = $bind_ky;
-            $_parameters[$bind_ky] = $vl;
+            $parameters[$bind_ky] = $vl;
         }
 
         // テーブル名
-        if (false === is_null($value->schema))
-        {
-            $table_name .= sprintf('%s.%s', $value->schema, $table_name);
-        }
+        $table_name = $this->tableNameWithSchema($table_name, $value);
 
         // クエリ
         $query = sprintf('INSERT INTO %s (%s) VALUES (%s);',
@@ -198,8 +188,10 @@ class Builder
             implode(',', array_values($columns))
             );
 
+        // ステートメント
+        $this->statement = new Statement();
         $this->statement->query = $query;
-        $this->parameters = $_parameters;
+        $this->parameters = $parameters;
 
         return $this;
     }
@@ -207,7 +199,7 @@ class Builder
 
 
     /**
-     * build update statement
+     * UPDATE文の生成
      *
      * @param string  $table_name
      * @param Columns $value
@@ -219,16 +211,13 @@ class Builder
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_UPDATE;
 
-        // ステートメント
-        $this->statement = new Statement();
-
         // 自動補完
         $value->completeUpdateColumn();
 
         // 登録情報
         $columns = [];
-        $_parameters = [];
         $properties = $value->properties();
+        $parameters = [];
         foreach ($properties as $ky => $vl)
         {
             if (is_null($vl) === true)
@@ -238,7 +227,7 @@ class Builder
 
             $bind_ky = sprintf(':%s', $ky);
             $columns[$ky] = sprintf('%s = %s', $ky, $bind_ky);
-            $_parameters[$bind_ky] = $vl;
+            $parameters[$bind_ky] = $vl;
         }
         // 登録条件
         $wheres = [];
@@ -252,14 +241,11 @@ class Builder
 
             $bind_ky = sprintf(':condition_%s', $ky);
             $wheres[$ky] = sprintf('%s = %s', $ky, $bind_ky);
-            $_parameters[$bind_ky] = $vl;
+            $parameters[$bind_ky] = $vl;
         }
 
         // テーブル名
-        if (false === is_null($condition->schema))
-        {
-            $table_name .= sprintf('%s.%s', $condition->schema, $table_name);
-        }
+        $table_name = $this->tableNameWithSchema($table_name, $condition);
 
         // クエリ
         $query = sprintf('UPDATE %s SET %s WHERE %s;',
@@ -268,8 +254,10 @@ class Builder
             implode(' AND ', array_values($wheres))
         );
 
+        // ステートメント
+        $this->statement = new Statement();
         $this->statement->query = $query;
-        $this->parameters = $_parameters;
+        $this->parameters = $parameters;
 
         return $this;
     }
@@ -277,7 +265,7 @@ class Builder
 
 
     /**
-     * build delete statement
+     * DELETE文の生成
      *
      * @param string  $table_name
      * @param Columns $condition
@@ -288,13 +276,10 @@ class Builder
         // クエリタイプ
         $this->query_type = self::QUERY_TYPE_UPDATE;
 
-        // ステートメント
-        $this->statement = new Statement();
-
         // 登録情報
         $wheres = [];
-        $_parameters = [];
         $properties = $condition->properties();
+        $parameters = [];
         foreach ($properties as $ky => $vl)
         {
             if (is_null($vl) === true)
@@ -304,14 +289,11 @@ class Builder
 
             $bind_ky = sprintf(':%s', $ky);
             $wheres[$ky] = sprintf('%s = %s', $ky, $bind_ky);
-            $_parameters[$bind_ky] = $vl;
+            $parameters[$bind_ky] = $vl;
         }
 
         // テーブル名
-        if (false === is_null($condition->schema))
-        {
-            $table_name .= sprintf('%s.%s', $condition->schema, $table_name);
-        }
+        $table_name = $this->tableNameWithSchema($table_name, $condition);
 
         // クエリ
         $query = sprintf('DELETE FROM %s WHERE %s;',
@@ -319,8 +301,10 @@ class Builder
             implode(',', array_values($wheres))
         );
 
+        // ステートメント
+        $this->statement = new Statement();
         $this->statement->query = $query;
-        $this->parameters = $_parameters;
+        $this->parameters = $parameters;
 
         return $this;
     }
@@ -328,20 +312,18 @@ class Builder
 
 
     /**
-     * execute
+     * 実行
      *
      * @param string|null $result_class
      * @return array|bool|Columns[]|null|ResultSet
      */
     public function execute(string $result_class = null)
     {
-        $result = null;
-
         // optimize parameters
-        $_parameters = self::optimizeParameter($this->statement->query, $this->parameters);
+        $parameters = self::optimizeParameter($this->statement->query, $this->parameters);
 
         // クエリパック
-        $queryPack = QueryPack::pack($this->statement->query, $_parameters, $result_class);
+        $queryPack = QueryPack::pack($this->statement->query, $parameters, $result_class);
 
         return Intersection::fetch($this->query_type, [
             // select
@@ -361,5 +343,23 @@ class Builder
                 return (new Executor($this->connection))->delete($queryPack);
             },
         ], true);
+    }
+
+
+
+    /**
+     * スキーマ指定がある場合は、テーブル名に付与する
+     *
+     * @param string  $table_name テーブル名
+     * @param Columns $columns    カラム定義/条件定義
+     * @return string スキーマ付きテーブル名
+     */
+    private function tableNameWithSchema(string $table_name, Columns $columns): string
+    {
+        if (false === is_null($columns->schema))
+        {
+            return sprintf('%s.%s', $columns->schema, $table_name);
+        }
+        return $table_name;
     }
 }
