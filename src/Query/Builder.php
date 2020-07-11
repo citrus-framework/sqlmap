@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
+use Citrus\Collection;
 use Citrus\Database\Columns;
 use Citrus\Database\Connection\Connection;
 use Citrus\Database\Executor;
@@ -90,15 +91,10 @@ class Builder
         if (false === is_null($condition))
         {
             // 検索条件
-            $properties = $condition->properties();
             $wheres = [];
+            $properties = Collection::stream($condition->properties())->notNull()->toList();
             foreach ($properties as $ky => $vl)
             {
-                if (is_null($vl) === true)
-                {
-                    continue;
-                }
-
                 $bind_ky = sprintf(':%s', $ky);
                 $wheres[] = sprintf('%s = %s', $ky, $bind_ky);
                 $parameters[$bind_ky] = $vl;
@@ -164,15 +160,10 @@ class Builder
 
         // 登録情報
         $columns = [];
-        $properties = $value->properties();
         $parameters = [];
+        $properties = Collection::stream($value->properties())->notNull()->toList();
         foreach ($properties as $ky => $vl)
         {
-            if (true === is_null($vl))
-            {
-                continue;
-            }
-
             $bind_ky = sprintf(':%s', $ky);
             $columns[$ky] = $bind_ky;
             $parameters[$bind_ky] = $vl;
@@ -216,29 +207,19 @@ class Builder
 
         // 登録情報
         $columns = [];
-        $properties = $value->properties();
         $parameters = [];
+        $properties = Collection::stream($value->properties())->notNull()->toList();
         foreach ($properties as $ky => $vl)
         {
-            if (is_null($vl) === true)
-            {
-                continue;
-            }
-
             $bind_ky = sprintf(':%s', $ky);
             $columns[$ky] = sprintf('%s = %s', $ky, $bind_ky);
             $parameters[$bind_ky] = $vl;
         }
         // 登録条件
         $wheres = [];
-        $properties = $condition->properties();
+        $properties = Collection::stream($condition->properties())->notNull()->toList();
         foreach ($properties as $ky => $vl)
         {
-            if (is_null($vl) === true)
-            {
-                continue;
-            }
-
             $bind_ky = sprintf(':condition_%s', $ky);
             $wheres[$ky] = sprintf('%s = %s', $ky, $bind_ky);
             $parameters[$bind_ky] = $vl;
@@ -278,15 +259,10 @@ class Builder
 
         // 登録情報
         $wheres = [];
-        $properties = $condition->properties();
         $parameters = [];
+        $properties = Collection::stream($condition->properties())->notNull()->toList();
         foreach ($properties as $ky => $vl)
         {
-            if (is_null($vl) === true)
-            {
-                continue;
-            }
-
             $bind_ky = sprintf(':%s', $ky);
             $wheres[$ky] = sprintf('%s = %s', $ky, $bind_ky);
             $parameters[$bind_ky] = $vl;
