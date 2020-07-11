@@ -25,7 +25,7 @@ class Statement
     public $parameter_class;
 
     /** @var string 結果定義クラス */
-    public $result_class = null;
+    public $result_class;
 
     /** @var string クエリ文字列 */
     public $query;

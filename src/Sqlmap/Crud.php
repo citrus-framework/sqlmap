@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 namespace Citrus\Sqlmap;
 
-use Citrus\Database\Column;
+use Citrus\Database\Columns;
+use Citrus\Database\DatabaseException;
 use Citrus\Database\Result;
 use Citrus\Database\ResultSet\ResultSet;
 
@@ -26,14 +27,21 @@ class Crud extends Client
     /**
      * サマリークエリの実行結果
      *
-     * @param Column $condition
+     * @param Columns $condition
      * @return ResultSet
      * @throws SqlmapException
      */
-    public function summary(Column $condition): ResultSet
+    public function summary(Columns $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'summary', $condition, $this->connection->dsn);
-        return $this->selectQuery($parser);
+        try
+        {
+            return $this->selectQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -41,14 +49,21 @@ class Crud extends Client
     /**
      * 詳細クエリの実行結果
      *
-     * @param Column $condition
+     * @param Columns $condition
      * @return ResultSet
      * @throws SqlmapException
      */
-    public function detail(Column $condition): ResultSet
+    public function detail(Columns $condition): ResultSet
     {
         $parser = Parser::generate($this->sqlmap_path, 'detail', $condition, $this->connection->dsn);
-        return $this->selectQuery($parser);
+        try
+        {
+            return $this->selectQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -56,16 +71,23 @@ class Crud extends Client
     /**
      * 件数クエリの実行結果
      *
-     * @param Column $condition
+     * @param Columns $condition
      * @return int
      * @throws SqlmapException
      */
-    public function count(Column $condition): int
+    public function count(Columns $condition): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'count', $condition, $this->connection->dsn);
-        /** @var Result $result */
-        $result = $this->selectQuery($parser)->one();
-        return $result->count;
+        try
+        {
+            /** @var Result $result */
+            $result = $this->selectQuery($parser->toPack())->one();
+            return $result->count;
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -73,14 +95,21 @@ class Crud extends Client
     /**
      * 登録クエリ
      *
-     * @param Column $entity
+     * @param Columns $entity
      * @return int
      * @throws SqlmapException
      */
-    public function create(Column $entity): int
+    public function create(Columns $entity): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'create', $entity, $this->connection->dsn);
-        return $this->insertQuery($parser);
+        try
+        {
+            return $this->insertQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -88,11 +117,11 @@ class Crud extends Client
     /**
      * 編集クエリ
      *
-     * @param Column $entity
+     * @param Columns $entity
      * @return int
      * @throws SqlmapException
      */
-    public function update(Column $entity): int
+    public function update(Columns $entity): int
     {
         // 全変更の危険を回避
         if (false === $this->validateEssentialModify($entity))
@@ -101,7 +130,14 @@ class Crud extends Client
         }
 
         $parser = Parser::generate($this->sqlmap_path, 'update', $entity, $this->connection->dsn);
-        return $this->updateQuery($parser);
+        try
+        {
+            return $this->updateQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 
 
@@ -109,13 +145,20 @@ class Crud extends Client
     /**
      * 削除クエリ
      *
-     * @param Column $condition
+     * @param Columns $condition
      * @return int
      * @throws SqlmapException
      */
-    public function remove(Column $condition): int
+    public function remove(Columns $condition): int
     {
         $parser = Parser::generate($this->sqlmap_path, 'remove', $condition, $this->connection->dsn);
-        return $this->deleteQuery($parser);
+        try
+        {
+            return $this->deleteQuery($parser->toPack());
+        }
+        catch (DatabaseException $e)
+        {
+            throw SqlmapException::convert($e);
+        }
     }
 }

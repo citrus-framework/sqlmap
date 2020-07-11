@@ -11,7 +11,7 @@ namespace Test\Sample\Integration\Property;
 /**
  * UserProperty
  */
-class UserProperty extends \Citrus\Database\Column
+class UserProperty extends \Citrus\Database\Columns
 {
     /** @var int  */
     public $user_id;
