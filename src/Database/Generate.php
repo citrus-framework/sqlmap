@@ -153,7 +153,7 @@ class Generate extends Configurable
         // プライマリキー文字列
         $primary_keys = '\'' . implode('\', \'', $this->catalogManager->primaryKeys($table_name)) . '\'';
         $primary_keys = sprintf('\'%s\'', $primary_keys);
-        $primary_keys = str_replace('\'\'', '', $primary_keys);
+        $primary_keys = str_replace('\'\'', '\'', $primary_keys);
 
         // 生成クラス名など
         $namespace = $this->configures['namespace'] . '\\Integration\\Property';
@@ -177,26 +177,7 @@ class Generate extends Configurable
                 (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callPrimaryKeys', false, 'call primary keys'))
                     ->setReturn(new KlassReturn('string[]'))
                     ->setBody(<<<BODY
-        return [${primary_keys}];
-BODY
-                    )
-            )
-            ->addMethod(
-                (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callCondition', false, 'call condition'))
-                    ->setReturn(new KlassReturn($condition_class_path))
-                    ->setBody(<<<BODY
-        if (true === is_null(\$this->condition))
-        {
-            \$this->condition = new ${condition_class_path}();
-            \$this->condition->nullify();
-        }
-        \$primary_keys = \$this->callPrimaryKeys();
-        foreach (\$primary_keys as \$primary_key)
-        {
-            \$this->condition->\$primary_key = \$this->\$primary_key;
-        }
-
-        return \$this->condition;
+        return [{$primary_keys}];
 BODY
                     )
             );
