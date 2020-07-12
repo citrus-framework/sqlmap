@@ -38,7 +38,7 @@ class Parser
     /** @var DOMXPath dom xpath */
     private $xpath;
 
-    /** @var Columns parameter */
+    /** @var Columns|Condition parameter */
     private $parameter;
 
     /** @var string Sqlmapのパス */
@@ -55,10 +55,10 @@ class Parser
     /**
      * パースして結果を取得
      *
-     * @param string  $sqlmap_path  Sqlmapのパス
-     * @param string  $statement_id Sqlmap内の対象ID
-     * @param Columns $parameter    受付パラメタ
-     * @param DSN     $dsn          DSN情報
+     * @param string            $sqlmap_path  Sqlmapのパス
+     * @param string            $statement_id Sqlmap内の対象ID
+     * @param Columns|Condition $parameter    受付パラメタ
+     * @param DSN                $dsn          DSN情報
      * @return Parser
      * @throws SqlmapException
      */

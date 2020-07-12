@@ -11,10 +11,15 @@ declare(strict_types=1);
 namespace Test\Sample\Business\Entity;
 
 use Citrus\Database\ResultSet\ResultClass;
+use Citrus\Sqlmap\Entity;
 use Test\Sample\Integration\Property\UserProperty;
 
 class UserEntity extends UserProperty implements ResultClass
 {
+    use Entity;
+
+
+
     /**
      * {@inheritDoc}
      */
