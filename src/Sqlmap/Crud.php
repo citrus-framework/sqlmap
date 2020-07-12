@@ -27,7 +27,7 @@ class Crud extends Client
     /**
      * サマリークエリの実行結果
      *
-     * @param Columns $condition
+     * @param Columns|Condition $condition
      * @return ResultSet
      * @throws SqlmapException
      */
@@ -49,7 +49,7 @@ class Crud extends Client
     /**
      * 詳細クエリの実行結果
      *
-     * @param Columns $condition
+     * @param Columns|Condition $condition
      * @return ResultSet
      * @throws SqlmapException
      */
@@ -71,7 +71,7 @@ class Crud extends Client
     /**
      * 件数クエリの実行結果
      *
-     * @param Columns $condition
+     * @param Columns|Condition $condition
      * @return int
      * @throws SqlmapException
      */
@@ -95,7 +95,7 @@ class Crud extends Client
     /**
      * 登録クエリ
      *
-     * @param Columns $entity
+     * @param Columns|Entity $entity
      * @return int
      * @throws SqlmapException
      */
@@ -117,7 +117,7 @@ class Crud extends Client
     /**
      * 編集クエリ
      *
-     * @param Columns $entity
+     * @param Columns|Entity $entity
      * @return int
      * @throws SqlmapException
      */
@@ -145,7 +145,7 @@ class Crud extends Client
     /**
      * 削除クエリ
      *
-     * @param Columns $condition
+     * @param Columns|Condition $condition
      * @return int
      * @throws SqlmapException
      */
