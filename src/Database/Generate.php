@@ -22,6 +22,7 @@ use Citrus\Variable\Klass\KlassReturn;
 use Citrus\Variable\Klass\KlassTrait;
 use Citrus\Variable\Klass\KlassVisibility;
 use Citrus\Variable\Singleton;
+use Citrus\Variable\Strings;
 
 /**
  * データベースオブジェクト生成処理
@@ -116,7 +117,8 @@ class Generate extends Configurable
         $namespace = $this->configures['namespace'] . '\\Integration\\Dao';
         $class_name = $class_prefix . 'Dao';
         $extend_name = '\\Citrus\\Sqlmap\\Crud';
-        $sqlmap_path = '__DIR__ . \'/../Sqlmap/' . ucfirst($table_name) . '.xml\'';
+        $sqlmap_path = '__DIR__ . \'/../Sqlmap/' . Strings::upperCamelCase($table_name) . '.xml\'';
+
         // 出力ディレクトリ
         $output_dir = $this->configures['output_dir'];
 
