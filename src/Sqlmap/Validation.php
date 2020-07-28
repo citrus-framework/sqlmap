@@ -27,7 +27,8 @@ trait Validation
     public function validateEssentialModify(Columns $entity): bool
     {
         // 全変更の危険を回避
-        if (0 === count(get_object_vars($entity->getCondition())))
+        if (true === method_exists($entity, 'callCondition') and
+            0 === count(get_object_vars($entity->callCondition())))
         {
             throw new SqlmapException(sprintf('変更処理条件が足りていません。'));
         }

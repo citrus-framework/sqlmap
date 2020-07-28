@@ -93,7 +93,9 @@ class Generate extends Configurable
             ->setNamespace($namespace)
             ->setClassComment($class_name)
             ->setExtends($extend_name)
-            ->addTrait(new KlassTrait('\\Citrus\\Sqlmap\\Condition'));
+            ->addTrait(new KlassTrait('\\Citrus\\Sqlmap\\Condition'))
+            ->addTrait(new KlassTrait('\\Citrus\\Variable\\PathBinders'))
+        ;
 
         $generate_class_path = sprintf('%s/Condition/%s.php', $output_dir, $class_name);
         file_put_contents($generate_class_path, $klass->toString());
@@ -127,6 +129,7 @@ class Generate extends Configurable
             ->setNamespace($namespace)
             ->setClassComment($class_name)
             ->setExtends($extend_name)
+            ->addTrait(new KlassTrait('\\Citrus\\Variable\\Singleton'))
             ->addProperty(KlassProperty::newProtectedString('sqlmap_path', $sqlmap_path, 'SQLMAP path'));
 
         $generate_class_path = sprintf('%s/Dao/%s.php', $output_dir, $class_name);

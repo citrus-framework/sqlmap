@@ -11,10 +11,8 @@ declare(strict_types=1);
 /**
  * sample :
  *
-./bin/migration.sh --directory=../medica6.project.tk --action=decoy
-./bin/migration.sh --directory=../medica6.project.tk --action=generate --name=CreateTableActors
-./bin/migration.sh --directory=../medica6.project.tk --action=up
-./bin/migration.sh --directory=../medica6.project.tk --action=up --version=20170717031426
+./vendor/bin/cf-integration --domain=citron.project.tk --type=${type} --table_name=${name} --class_prefix=${prefix}
+./vendor/bin/cf-integration --domain=citron.project.tk --type=all --table_name=projects --class_prefix=Project
  */
 
 // search directory
@@ -45,5 +43,4 @@ $configure_path = implode('/', $configure_paths);
 $configures = include($configure_path);
 
 // run!
-Citrus\Citrus::initialize();
 Citrus\Database\GenerateCommand::runner($configures);
