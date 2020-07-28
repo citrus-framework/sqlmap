@@ -23,6 +23,9 @@ trait Entity
     /** @var string */
     public $condition_class;
 
+    /** @var string[] */
+    public $condition_keys = [];
+
 
 
     /**
@@ -57,6 +60,10 @@ trait Entity
             {
                 $this->condition->$primary_key = $this->$primary_key;
             }
+        }
+        foreach ($this->condition_keys as $condition_key)
+        {
+            $this->condition->$condition_key = $this->$condition_key;
         }
 
         return $this->condition;
