@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Citrus\Sqlmap;
 
+use Citrus\Database\Columns;
+
 /**
  * 共通Entity
  */
@@ -26,9 +28,9 @@ trait Entity
     /**
      * Conditionを取得
      *
-     * @return Condition
+     * @return Condition|Columns
      */
-    public function getCondition(): Condition
+    public function getCondition(): Columns
     {
         return $this->condition;
     }
@@ -38,9 +40,9 @@ trait Entity
     /**
      * Conditionを生成して返却
      *
-     * @return Condition
+     * @return Condition|Columns
      */
-    public function callCondition(): Condition
+    public function callCondition(): Columns
     {
         if (true === is_null($this->condition))
         {
