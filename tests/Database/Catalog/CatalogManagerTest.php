@@ -109,7 +109,7 @@ class CatalogManagerTest extends TestCase
         {
             if ('user_id' === $column_name)
             {
-                $this->assertSame('int', $tableColumn->data_type);
+                $this->assertSame('INT', $tableColumn->data_type);
             }
             else if ('name' === $column_name)
             {

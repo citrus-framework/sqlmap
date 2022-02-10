@@ -18,7 +18,7 @@ use Citrus\Database\Executor;
 class Client extends Executor
 {
     /** @var string SQLMAPのパス */
-    protected $sqlmap_path;
+    protected string $sqlmap_path;
 
 
 
