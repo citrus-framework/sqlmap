@@ -24,14 +24,19 @@
     "ext-pdo": "*"
   },
   "require-dev": {
-    "php": "^7.3",
-    "phpunit/phpunit": "^8.4",
-    "nunomaduro/phpinsights": "^v1.13"
+    "php": "^8.1",
+    "phpunit/phpunit": "^9.5",
+    "nunomaduro/phpinsights": "^v2.0"
   },
   "autoload": {
     "psr-4": {
       "Citrus\\": "src/",
       "Test\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }
