@@ -201,7 +201,7 @@ BODY
             // コメント
             $comment = (true === array_key_exists($column_name, $comments) ? $comments[$column_name]->comment : '');
             // プロパティ追加
-            $klass->addProperty(new KlassProperty('?' . $data_type, $column_name, 'null', $comment));
+            $klass->addProperty(new KlassProperty($data_type . '|null', $column_name, 'null', $comment));
         }
 
         $generate_class_path = sprintf('%s/Property/%s.php', $output_dir, $class_name);
@@ -293,7 +293,7 @@ BODY
                 break;
             case 'numeric':
                 // 浮動小数点
-                $data_type = 'float';
+                $data_type = 'float|string';
                 break;
             default:
         }
