@@ -5,8 +5,8 @@ define highlight
 	@echo "\033[1;32m$1\033[0m"
 endef
 
-.PHONY: test_all
-test_all:
+.PHONY: test
+test:
 	@./vendor/bin/phpunit
 
 .PHONY: composer_reload
@@ -31,4 +31,3 @@ composer_check:
 .PHONY: insights
 insights:
 	@./vendor/bin/phpinsights analyse ./src
-

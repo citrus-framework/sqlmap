@@ -28,7 +28,6 @@ foreach ($current_dirs as $row)
     $paths[] = $row;
 }
 
-
 // autoload
 $autoload_paths = $paths;
 $autoload_paths[] = 'vendor';

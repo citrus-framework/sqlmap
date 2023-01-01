@@ -27,28 +27,28 @@ use DOMXPath;
 class Parser
 {
     /** @var Statement statement */
-    public $statement;
+    public Statement $statement;
 
     /** @var array parameters */
-    public $parameter_list = [];
+    public array $parameter_list = [];
 
     /** @var DOMDocument dom document */
-    private $dom;
+    private DOMDocument $dom;
 
     /** @var DOMXPath dom xpath */
-    private $xpath;
+    private DOMXPath $xpath;
 
     /** @var Columns|Condition parameter */
-    private $parameter;
+    private Columns|Condition $parameter;
 
     /** @var string Sqlmapのパス */
-    private $path;
+    private string $path;
 
     /** @var string Sqlmap内の対象ID */
-    private $statement_id;
+    private string $statement_id;
 
     /** @var DSN DSN情報 */
-    private $dsn;
+    private DSN $dsn;
 
 
 
@@ -58,12 +58,16 @@ class Parser
      * @param string            $sqlmap_path  Sqlmapのパス
      * @param string            $statement_id Sqlmap内の対象ID
      * @param Columns|Condition $parameter    受付パラメタ
-     * @param DSN                $dsn          DSN情報
+     * @param DSN               $dsn          DSN情報
      * @return Parser
      * @throws SqlmapException
      */
-    public static function generate(string $sqlmap_path, string $statement_id, Columns $parameter, DSN $dsn): Parser
-    {
+    public static function generate(
+        string $sqlmap_path,
+        string $statement_id,
+        Columns|Condition $parameter,
+        DSN $dsn,
+    ): Parser {
         $self = new self();
         $self->path = $sqlmap_path;
         $self->statement_id = $statement_id;
@@ -72,8 +76,6 @@ class Parser
         $self->parse();
         return $self;
     }
-
-
 
     /**
      * Sqlmapのパース
@@ -90,11 +92,13 @@ class Parser
         // 見つからない場合
         SqlmapException::exceptionIf(
             (0 === $nodeList->length),
-            sprintf(' Sqlmapファイル「%s」に「%s」の定義がありません', $this->path, $this->statement_id));
+            sprintf(' Sqlmapファイル「%s」に「%s」の定義がありません', $this->path, $this->statement_id)
+        );
         // 逆に1つ以上見つかった場合
         SqlmapException::exceptionIf(
             (1 < $nodeList->length),
-            sprintf(' Sqlmapファイル「%s」に「%s」が複数定義されています', $this->path, $this->statement_id));
+            sprintf(' Sqlmapファイル「%s」に「%s」が複数定義されています', $this->path, $this->statement_id)
+        );
         $element = $nodeList->item(0);
 
         // ステートメントの生成
@@ -114,7 +118,8 @@ class Parser
             $this->statement->query = str_replace(
                 '{SCHEMA}',
                 '"' . $this->parameter->schema . '".',
-                $this->statement->query);
+                $this->statement->query
+            );
         }
         // スキーマ制度がない場合に除去
         $this->statement->query = str_replace('{SCHEMA}', '', $this->statement->query);
@@ -177,8 +182,6 @@ class Parser
         $this->statement->query = $query;
     }
 
-
-
     /**
      * replace sqlmap parameter
      *
@@ -195,8 +198,6 @@ class Parser
         }
     }
 
-
-
     /**
      * クエリパックに変換
      *
@@ -206,8 +207,6 @@ class Parser
     {
         return QueryPack::pack($this->statement->query, $this->parameter_list, $this->statement->result_class);
     }
-
-
 
     /**
      * node 要素汎用処理
@@ -246,8 +245,6 @@ class Parser
         return $dynamic->query;
     }
 
-
-
     /**
      * テキストノード処理
      *
@@ -261,8 +258,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * CDATAノード処理
@@ -278,8 +273,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * テキストノードのクエリ処理
      *
@@ -291,8 +284,6 @@ class Parser
         return (' ' . trim($text));
     }
 
-
-
     /**
      * CDATAノードのクエリ処理
      *
@@ -303,8 +294,6 @@ class Parser
     {
         return (' ' . trim($cdata));
     }
-
-
 
     /**
      * ダイナミックノード処理
@@ -319,8 +308,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isNullノード処理
@@ -340,8 +327,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isNotNullノード処理
      *
@@ -360,8 +345,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isEmptyノード処理
@@ -383,8 +366,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isNotEmptyノード処理
      *
@@ -403,8 +384,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isEqualノード処理
@@ -426,8 +405,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isNotEqualノード処理
      *
@@ -448,8 +425,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isGreaterThanノード処理
      *
@@ -468,8 +443,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isGreaterEqualノード処理
@@ -490,8 +463,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isLessThanノード処理
      *
@@ -510,8 +481,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isLessEqualノード処理
@@ -532,8 +501,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isNumericノード処理
      *
@@ -553,8 +520,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * isDatetimeノード処理
      *
@@ -573,8 +538,6 @@ class Parser
 
         return $dynamic;
     }
-
-
 
     /**
      * isTrue element node parser
@@ -596,8 +559,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * include element node parser
      * includeノード処理
@@ -616,8 +577,6 @@ class Parser
         return $dynamic;
     }
 
-
-
     /**
      * ネストの深いプロパティーを取得する。
      *
@@ -634,8 +593,6 @@ class Parser
         }
         return $result;
     }
-
-
 
     /**
      * 比較プロパティ、もしくは、比較血を取得

@@ -24,7 +24,7 @@ trait Optimize
      * @param array|null $parameters
      * @return array
      */
-    public static function optimizeParameter(string $query, array $parameters = null): array
+    public static function optimizeParameter(string $query, array|null $parameters = null): array
     {
         // パラメータがなければスルー
         if (true === is_null($parameters))
