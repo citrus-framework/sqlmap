@@ -32,8 +32,8 @@ class Generate extends Configurable
     use ConsoleOutput;
     use Singleton;
 
-    /** @var CatalogManager カタログマネージャ */
-    protected $catalogManager;
+    /** @var CatalogManager|null カタログマネージャ */
+    protected CatalogManager|null $catalogManager = null;
 
 
 

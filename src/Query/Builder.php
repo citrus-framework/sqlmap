@@ -36,19 +36,16 @@ class Builder
     /** @var QueryType $queryType */
     public QueryType $queryType = QueryType::SELECT;
 
-    /** @var Connection */
-    public Connection $connection;
-
 
 
     /**
      * constructor.
      *
-     * @param Connection $connection
+     * @param Connection $connection 接続情報
      */
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private readonly Connection $connection
+    ) {
     }
 
     /**

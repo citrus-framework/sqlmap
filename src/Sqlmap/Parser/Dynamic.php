@@ -18,23 +18,23 @@ use DOMNamedNodeMap;
  */
 class Dynamic
 {
-    /** @var string エレメントID */
-    public string $id;
+    /** @var string|null エレメントID */
+    public string|null $id = null;
 
-    /** @var string 参照ID */
-    public string $refid;
+    /** @var string|null 参照ID */
+    public string|null $refid = null;
 
-    /** @var string 先頭につける要素 */
-    public string $prepend;
+    /** @var string|null 先頭につける要素 */
+    public string|null $prepend = null;
 
-    /** @var string プロパティ */
-    public string $property;
+    /** @var string|null プロパティ */
+    public string|null $property = null;
 
-    /** @var string プロパティ比較 */
-    public string $compare_property;
+    /** @var string|null プロパティ比較 */
+    public string|null $compare_property = null;
 
-    /** @var string 値比較 */
-    public string $compare_value;
+    /** @var string|null 値比較 */
+    public string|null $compare_value = null;
 
     /** @var string 中身のクエリー */
     public string $query = '';

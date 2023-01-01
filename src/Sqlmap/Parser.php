@@ -26,29 +26,29 @@ use DOMXPath;
  */
 class Parser
 {
-    /** @var Statement statement */
-    public Statement $statement;
+    /** @var Statement|null statement */
+    public Statement|null $statement;
 
     /** @var array parameters */
     public array $parameter_list = [];
 
-    /** @var DOMDocument dom document */
-    private DOMDocument $dom;
+    /** @var DOMDocument|null dom document */
+    private DOMDocument|null $dom;
 
-    /** @var DOMXPath dom xpath */
-    private DOMXPath $xpath;
+    /** @var DOMXPath|null dom xpath */
+    private DOMXPath|null $xpath;
 
     /** @var Columns|Condition parameter */
     private Columns|Condition $parameter;
 
-    /** @var string Sqlmapのパス */
-    private string $path;
+    /** @var string|null Sqlmapのパス */
+    private string|null $path;
 
-    /** @var string Sqlmap内の対象ID */
-    private string $statement_id;
+    /** @var string|null Sqlmap内の対象ID */
+    private string|null $statement_id;
 
-    /** @var DSN DSN情報 */
-    private DSN $dsn;
+    /** @var DSN|null DSN情報 */
+    private DSN|null $dsn;
 
 
 
