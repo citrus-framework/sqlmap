@@ -27,17 +27,17 @@ class Builder
 {
     use Optimize;
 
-    /** @var Statement $statement */
-    public $statement = null;
+    /** @var Statement|null $statement */
+    public Statement|null $statement = null;
 
     /** @var array $parameters */
-    public $parameters = [];
+    public array $parameters = [];
 
-    /** @var string $query_type */
-    public $query_type = self::QUERY_TYPE_SELECT;
+    /** @var QueryType $queryType */
+    public QueryType $queryType = QueryType::SELECT;
 
     /** @var Connection */
-    public $connection;
+    public Connection $connection;
 
 
 
@@ -51,17 +51,15 @@ class Builder
         $this->connection = $connection;
     }
 
-
-
     /**
      * SELECT文の生成
      *
-     * @param string       $table_name
-     * @param Columns|null $condition
-     * @param array|null   $columns
+     * @param string                 $table_name
+     * @param Columns|Condition|null $condition
+     * @param array|null             $columns
      * @return Builder
      */
-    public function select(string $table_name, Columns $condition = null, array $columns = null): Builder
+    public function select(string $table_name, Columns|Condition|null $condition = null, array|null $columns = null): Builder
     {
         // クエリタイプ
         $this->queryType = QueryType::SELECT;
@@ -97,8 +95,6 @@ class Builder
             $condition_traits = class_uses($condition);
             if (true === array_key_exists('Condition', $condition_traits))
             {
-                /** @var Condition $condition */
-
                 // 順序
                 if (false === is_null($condition->orderby))
                 {
@@ -128,8 +124,6 @@ class Builder
 
         return $this;
     }
-
-
 
     /**
      * INSERT文の生成
@@ -161,11 +155,12 @@ class Builder
         $table_name = $this->tableNameWithSchema($table_name, $value);
 
         // クエリ
-        $query = sprintf('INSERT INTO %s (%s) VALUES (%s);',
+        $query = sprintf(
+            'INSERT INTO %s (%s) VALUES (%s);',
             $table_name,
             implode(',', array_keys($columns)),
-            implode(',', array_values($columns))
-            );
+            implode(',', array_values($columns)),
+        );
 
         // ステートメント
         $this->statement = new Statement();
@@ -174,8 +169,6 @@ class Builder
 
         return $this;
     }
-
-
 
     /**
      * UPDATE文の生成
@@ -217,10 +210,11 @@ class Builder
         $table_name = $this->tableNameWithSchema($table_name, $condition);
 
         // クエリ
-        $query = sprintf('UPDATE %s SET %s WHERE %s;',
+        $query = sprintf(
+            'UPDATE %s SET %s WHERE %s;',
             $table_name,
             implode(', ', array_values($columns)),
-            implode(' AND ', array_values($wheres))
+            implode(' AND ', array_values($wheres)),
         );
 
         // ステートメント
@@ -230,8 +224,6 @@ class Builder
 
         return $this;
     }
-
-
 
     /**
      * DELETE文の生成
@@ -260,9 +252,10 @@ class Builder
         $table_name = $this->tableNameWithSchema($table_name, $condition);
 
         // クエリ
-        $query = sprintf('DELETE FROM %s WHERE %s;',
+        $query = sprintf(
+            'DELETE FROM %s WHERE %s;',
             $table_name,
-            implode(',', array_values($wheres))
+            implode(',', array_values($wheres)),
         );
 
         // ステートメント
@@ -273,15 +266,13 @@ class Builder
         return $this;
     }
 
-
-
     /**
      * 実行
      *
      * @param string|null $result_class
-     * @return array|bool|Columns[]|null|ResultSet
+     * @return array|bool|Columns[]|ResultSet|null
      */
-    public function execute(string $result_class = null)
+    public function execute(string|null $result_class = null)
     {
         // optimize parameters
         $parameters = self::optimizeParameter($this->statement->query, $this->parameters);
@@ -308,8 +299,6 @@ class Builder
             },
         ], true);
     }
-
-
 
     /**
      * スキーマ指定がある場合は、テーブル名に付与する

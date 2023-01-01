@@ -19,25 +19,25 @@ use DOMNamedNodeMap;
 class Dynamic
 {
     /** @var string エレメントID */
-    public $id;
+    public string $id;
 
     /** @var string 参照ID */
-    public $refid;
+    public string $refid;
 
     /** @var string 先頭につける要素 */
-    public $prepend;
+    public string $prepend;
 
     /** @var string プロパティ */
-    public $property;
+    public string $property;
 
     /** @var string プロパティ比較 */
-    public $compare_property;
+    public string $compare_property;
 
     /** @var string 値比較 */
-    public $compare_value;
+    public string $compare_value;
 
     /** @var string 中身のクエリー */
-    public $query = '';
+    public string $query = '';
 
 
 
@@ -55,12 +55,12 @@ class Dynamic
 
         // 設定表
         $bind_keys = [
-            'id' => 'id',
-            'refid' => 'refid',
-            'prepend' => 'prepend',
-            'property' => 'property',
+            'id'              => 'id',
+            'refid'           => 'refid',
+            'prepend'         => 'prepend',
+            'property'        => 'property',
             'compareProperty' => 'compare_property',
-            'compareValue' => 'compare_value',
+            'compareValue'    => 'compare_value',
         ];
 
         $items = Xmls::toList($attributes);
@@ -72,8 +72,6 @@ class Dynamic
             $this->$bind_key = $value;
         }
     }
-
-
 
     /**
      * concatenate this
@@ -104,8 +102,6 @@ class Dynamic
         $this->concatenateString($_query);
     }
 
-
-
     /**
      * concatenate this
      *
@@ -120,8 +116,6 @@ class Dynamic
             $this->query .= $query;
         }
     }
-
-
 
     /**
      * combine other to other
@@ -143,8 +137,6 @@ class Dynamic
         return '';
     }
 
-
-
     /**
      * prependの取得
      *
@@ -154,8 +146,6 @@ class Dynamic
     {
         return ($this->prepend ?: '');
     }
-
-
 
     /**
      * クエリの取得

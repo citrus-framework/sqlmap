@@ -57,8 +57,6 @@ class Generate extends Configurable
         return $this;
     }
 
-
-
     /**
      * Conditionクラスの生成
      *
@@ -90,8 +88,6 @@ class Generate extends Configurable
         file_put_contents($generate_class_path, $klass->toString());
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
-
-
 
     /**
      * Daoクラスの生成
@@ -127,8 +123,6 @@ class Generate extends Configurable
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
 
-
-
     /**
      * Propertyクラスの生成
      *
@@ -152,7 +146,6 @@ class Generate extends Configurable
         $namespace = $this->configures['namespace'] . '\\Integration\\Property';
         $class_name = $class_prefix . 'Property';
         $extend_name = '\\Citrus\\Database\\Columns';
-        $condition_class_path = '\\' . $this->configures['namespace'] . '\\Integration\\Condition\\' . $class_prefix . 'Condition';
 
         // 出力ディレクトリ
         $output_dir = $this->configures['output_dir'];
@@ -169,13 +162,14 @@ class Generate extends Configurable
             ->addMethod(
                 (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callPrimaryKeys', false, 'call primary keys'))
                     ->setReturn(new KlassReturn('string[]'))
-                    ->setBody(<<<BODY
+                    ->setBody(
+                        <<<BODY
         return [{$primary_keys}];
 BODY
                     )
             );
 
-        foreach ($columns as $column_name => $columnDef)
+        foreach ($columns as $columnDef)
         {
             // データ型
             $data_type = self::convertToPHPType($columnDef->data_type);
@@ -197,8 +191,6 @@ BODY
         $this->success(sprintf('generate class file => %s', $generate_class_path));
     }
 
-
-
     /**
      * クラスの一括生成
      *
@@ -212,8 +204,6 @@ BODY
         $this->property($class_prefix, $table_name);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -222,21 +212,17 @@ BODY
         return 'integration';
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     protected function configureDefaults(): array
     {
         return [
-            'mode' => 0755,
+            'mode'  => 0755,
             'owner' => posix_getpwuid(posix_geteuid())['name'],
             'group' => posix_getgrgid(posix_getegid())['name'],
         ];
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -252,8 +238,6 @@ BODY
             'namespace',
         ];
     }
-
-
 
     /**
      * テーブルカラムの型からPHPの型に変換
@@ -288,13 +272,8 @@ BODY
         return $data_type;
     }
 
-
-
-
     /**
      * 出力ファイル格納ディレクトリパスの設定
-     *
-     * @return void
      */
     private function setupOutputDirectory(): void
     {

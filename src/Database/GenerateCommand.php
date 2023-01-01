@@ -18,8 +18,8 @@ use Citrus\Console;
  */
 class GenerateCommand extends Console
 {
-    /** @var array command options */
-    protected $options = [
+    /** @var string[] command options */
+    protected array $options = [
         'type::',
         'table_name::',
         'class_prefix:',
