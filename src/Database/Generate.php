@@ -32,18 +32,6 @@ class Generate extends Configurable
     use ConsoleOutput;
     use Singleton;
 
-    /** @var string Propertyクラス */
-    public const TYPE_PROPERTY = 'property';
-
-    /** @var string Daoクラス */
-    public const TYPE_DAO = 'dao';
-
-    /** @var string Conditionクラス */
-    public const TYPE_CONDITION = 'condition';
-
-    /** @var string 全て */
-    public const TYPE_ALL = 'all';
-
     /** @var CatalogManager カタログマネージャ */
     protected $catalogManager;
 

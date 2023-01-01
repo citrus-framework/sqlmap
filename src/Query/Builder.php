@@ -27,18 +27,6 @@ class Builder
 {
     use Optimize;
 
-    /** @var string query type select */
-    public const QUERY_TYPE_SELECT = 'select';
-
-    /** @var string query type insert */
-    public const QUERY_TYPE_INSERT = 'insert';
-
-    /** @var string query type update */
-    public const QUERY_TYPE_UPDATE = 'update';
-
-    /** @var string query type delete */
-    public const QUERY_TYPE_DELETE = 'delete';
-
     /** @var Statement $statement */
     public $statement = null;
 
@@ -76,7 +64,7 @@ class Builder
     public function select(string $table_name, Columns $condition = null, array $columns = null): Builder
     {
         // クエリタイプ
-        $this->query_type = self::QUERY_TYPE_SELECT;
+        $this->queryType = QueryType::SELECT;
 
         // カラム列挙
         $select_context = (true === is_array($columns) ? implode(', ', $columns) : '*');
@@ -153,7 +141,7 @@ class Builder
     public function insert(string $table_name, Columns $value): Builder
     {
         // クエリタイプ
-        $this->query_type = self::QUERY_TYPE_INSERT;
+        $this->queryType = QueryType::INSERT;
 
         // 自動補完
         $value->completeCreateColumn();
@@ -200,7 +188,7 @@ class Builder
     public function update(string $table_name, Columns $value, Columns $condition): Builder
     {
         // クエリタイプ
-        $this->query_type = self::QUERY_TYPE_UPDATE;
+        $this->queryType = QueryType::UPDATE;
 
         // 自動補完
         $value->completeUpdateColumn();
@@ -255,7 +243,7 @@ class Builder
     public function delete(string $table_name, Columns $condition): Builder
     {
         // クエリタイプ
-        $this->query_type = self::QUERY_TYPE_UPDATE;
+        $this->queryType = QueryType::UPDATE;
 
         // 登録情報
         $wheres = [];
@@ -301,21 +289,21 @@ class Builder
         // クエリパック
         $queryPack = QueryPack::pack($this->statement->query, $parameters, $result_class);
 
-        return Intersection::fetch($this->query_type, [
+        return Intersection::fetch($this->queryType->value, [
             // select
-            self::QUERY_TYPE_SELECT => function () use ($queryPack) {
+            QueryType::SELECT->value => function () use ($queryPack) {
                 return (new Executor($this->connection))->selectQuery($queryPack);
             },
             // insert
-            self::QUERY_TYPE_INSERT => function () use ($queryPack) {
+            QueryType::INSERT->value => function () use ($queryPack) {
                 return (new Executor($this->connection))->insertQuery($queryPack);
             },
             // update
-            self::QUERY_TYPE_UPDATE => function () use ($queryPack) {
+            QueryType::UPDATE->value => function () use ($queryPack) {
                 return (new Executor($this->connection))->updateQuery($queryPack);
             },
             // delete
-            self::QUERY_TYPE_DELETE => function () use ($queryPack) {
+            QueryType::DELETE->value => function () use ($queryPack) {
                 return (new Executor($this->connection))->deleteQuery($queryPack);
             },
         ], true);
