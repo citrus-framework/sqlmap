@@ -18,17 +18,17 @@ use DOMNamedNodeMap;
  */
 class Statement
 {
-    /** @var string ステートメントID */
-    public $id;
+    /** @var string|null ステートメントID */
+    public string|null $id;
 
-    /** @var string パラメータ定義クラス */
-    public $parameter_class;
+    /** @var string|null パラメータ定義クラス */
+    public string|null $parameter_class;
 
-    /** @var string 結果定義クラス */
-    public $result_class;
+    /** @var string|null 結果定義クラス */
+    public string|null $result_class;
 
-    /** @var string クエリ文字列 */
-    public $query;
+    /** @var string|null クエリ文字列 */
+    public string|null $query;
 
 
 
