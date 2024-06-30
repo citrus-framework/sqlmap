@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * generated Citrus Property file at 2020-07-11 19:02:50
+ * generated Citrus Property file at 2024-06-30 04:20:15
  */
 
 namespace Test\Sample\Integration\Property;
@@ -13,11 +13,11 @@ namespace Test\Sample\Integration\Property;
  */
 class UserProperty extends \Citrus\Database\Columns
 {
-    /** @var int  */
-    public $user_id;
+    /** @var int|null  */
+    public int|null $user_id = null;
 
-    /** @var string  */
-    public $name;
+    /** @var string|null  */
+    public string|null $name = null;
 
 
 

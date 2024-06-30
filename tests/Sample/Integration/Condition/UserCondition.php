@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * generated Citrus Condition file at 2020-07-11 19:02:50
+ * generated Citrus Condition file at 2024-06-30 04:20:15
  */
 
 namespace Test\Sample\Integration\Condition;
@@ -14,4 +14,5 @@ namespace Test\Sample\Integration\Condition;
 class UserCondition extends \Test\Sample\Integration\Property\UserProperty
 {
     use \Citrus\Sqlmap\Condition;
+    use \Citrus\Variable\PathBinders;
 }

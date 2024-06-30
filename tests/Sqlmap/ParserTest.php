@@ -29,18 +29,16 @@ class ParserTest extends TestCase
     use TestFile;
 
     /** @var string 出力ディレクトリ */
-    private $output_dir;
+    private string $output_dir;
 
     /** @var string SQLITEファイル */
-    private $sqlite_file;
+    private string $sqlite_file;
 
     /** @var array 設定配列 */
-    private $configures;
+    private array $configures;
 
     /** @var Connection */
-    private $connection;
-
-
+    private Connection $connection;
 
     /**
      * {@inheritDoc}
@@ -80,8 +78,6 @@ class ParserTest extends TestCase
         $this->connection = new Connection($dsn);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -92,8 +88,6 @@ class ParserTest extends TestCase
         // ディレクトリがあったら削除
         $this->forceRemove($this->output_dir);
     }
-
-
 
     /**
      * @test
@@ -117,8 +111,6 @@ class ParserTest extends TestCase
         $this->assertSame('hogehoge', $entity->name);
     }
 
-
-
     /**
      * @test
      * @throws SqlmapException
@@ -137,8 +129,6 @@ class ParserTest extends TestCase
         // 件数チェック
         $this->assertCount(3, $resultSet);
     }
-
-
 
     /**
      * @throws SqlmapException
@@ -164,8 +154,6 @@ class ParserTest extends TestCase
             $this->assertNotSame(2, $row->user_id);
         }
     }
-
-
 
     /**
      * @test

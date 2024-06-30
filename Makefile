@@ -31,3 +31,4 @@ composer_check:
 .PHONY: insights
 insights:
 	@./vendor/bin/phpinsights analyse ./src
+
