@@ -36,6 +36,7 @@ return [
 
         // Style
         PHP_CodeSniffer\Standards\Generic\Sniffs\WhiteSpace\ArbitraryParenthesesSpacingSniff::class,
+        PHP_CodeSniffer\Standards\PSR2\Sniffs\ControlStructures\ElseIfDeclarationSniff::class,
     ],
     'config' => [
         // Architecture

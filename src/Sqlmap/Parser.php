@@ -109,7 +109,7 @@ class Parser
         $this->statement->query = $this->_nodes($nodes);
 
         // キーワードの置換
-        if (true === Strings::isEmpty($this->parameter->schema))
+        if (true === Strings::isEmpty($this->parameter->schema ?? ''))
         {
             $this->parameter->schema = $this->dsn->schema;
         }
@@ -589,7 +589,7 @@ class Parser
         $result = $this->parameter;
         foreach ($properties as $one)
         {
-            $result = $result->$one;
+            $result = $result->$one ?? null;
         }
         return $result;
     }

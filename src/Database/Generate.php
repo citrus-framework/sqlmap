@@ -160,7 +160,7 @@ class Generate extends Configurable
             ->setClassComment($class_name)
             ->setExtends($extend_name)
             ->addMethod(
-                (new KlassMethod(KlassVisibility::TYPE_PUBLIC, 'callPrimaryKeys', false, 'call primary keys'))
+                (new KlassMethod(KlassVisibility::PUBLIC, 'callPrimaryKeys', false, 'call primary keys'))
                     ->setReturn(new KlassReturn('string[]'))
                     ->setBody(
                         <<<BODY

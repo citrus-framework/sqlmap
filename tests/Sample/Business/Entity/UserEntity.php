@@ -18,8 +18,6 @@ class UserEntity extends UserProperty implements ResultClass
 {
     use Entity;
 
-
-
     /**
      * {@inheritDoc}
      */
