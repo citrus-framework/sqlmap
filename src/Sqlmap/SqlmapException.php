@@ -19,7 +19,6 @@ class SqlmapException extends DatabaseException
 {
     /**
      * {@inheritDoc}
-     *
      * @throws SqlmapException
      */
     public static function exceptionIf($expr, string $message): void
@@ -27,11 +26,8 @@ class SqlmapException extends DatabaseException
         parent::exceptionIf($expr, $message);
     }
 
-
-
     /**
      * {@inheritDoc}
-     *
      * @throws SqlmapException
      */
     public static function exceptionElse($expr, string $message): void

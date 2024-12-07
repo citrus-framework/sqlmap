@@ -19,7 +19,6 @@ trait Validation
 {
     /**
      * update実行時の必須チェック
-     *
      * @param Columns $entity
      * @return bool
      * @throws SqlmapException

@@ -50,11 +50,8 @@ class Parser
     /** @var DSN|null DSN情報 */
     private DSN|null $dsn;
 
-
-
     /**
      * パースして結果を取得
-     *
      * @param string            $sqlmap_path  Sqlmapのパス
      * @param string            $statement_id Sqlmap内の対象ID
      * @param Columns|Condition $parameter    受付パラメタ
@@ -79,7 +76,6 @@ class Parser
 
     /**
      * Sqlmapのパース
-     *
      * @throws SqlmapException
      */
     public function parse(): void
@@ -184,7 +180,6 @@ class Parser
 
     /**
      * replace sqlmap parameter
-     *
      * @param Columns|null $parameter
      * @deprecated
      */
@@ -200,7 +195,6 @@ class Parser
 
     /**
      * クエリパックに変換
-     *
      * @return QueryPack
      */
     public function toPack(): QueryPack
@@ -210,7 +204,6 @@ class Parser
 
     /**
      * node 要素汎用処理
-     *
      * @param DOMNodeList  $nodes
      * @param Dynamic|null $dynamic
      * @return string
@@ -247,7 +240,6 @@ class Parser
 
     /**
      * テキストノード処理
-     *
      * @param string $text
      * @return Dynamic
      */
@@ -261,7 +253,6 @@ class Parser
 
     /**
      * CDATAノード処理
-     *
      * @param string $cdata
      * @return Dynamic
      */
@@ -275,7 +266,6 @@ class Parser
 
     /**
      * テキストノードのクエリ処理
-     *
      * @param string $text
      * @return string
      */
@@ -286,7 +276,6 @@ class Parser
 
     /**
      * CDATAノードのクエリ処理
-     *
      * @param string $cdata
      * @return string
      */
@@ -297,7 +286,6 @@ class Parser
 
     /**
      * ダイナミックノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -311,7 +299,6 @@ class Parser
 
     /**
      * isNullノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -329,7 +316,6 @@ class Parser
 
     /**
      * isNotNullノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -348,7 +334,6 @@ class Parser
 
     /**
      * isEmptyノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -368,7 +353,6 @@ class Parser
 
     /**
      * isNotEmptyノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -387,7 +371,6 @@ class Parser
 
     /**
      * isEqualノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -407,7 +390,6 @@ class Parser
 
     /**
      * isNotEqualノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -427,7 +409,6 @@ class Parser
 
     /**
      * isGreaterThanノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -446,7 +427,6 @@ class Parser
 
     /**
      * isGreaterEqualノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -465,7 +445,6 @@ class Parser
 
     /**
      * isLessThanノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -484,7 +463,6 @@ class Parser
 
     /**
      * isLessEqualノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -503,7 +481,6 @@ class Parser
 
     /**
      * isNumericノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -522,7 +499,6 @@ class Parser
 
     /**
      * isDatetimeノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -542,7 +518,6 @@ class Parser
     /**
      * isTrue element node parser
      * isTrueノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      */
@@ -562,7 +537,6 @@ class Parser
     /**
      * include element node parser
      * includeノード処理
-     *
      * @param DOMElement $element
      * @return Dynamic
      * @throws SqlmapException
@@ -579,7 +553,6 @@ class Parser
 
     /**
      * ネストの深いプロパティーを取得する。
-     *
      * @param string $property  ex.) user.condition.user_id
      * @return mixed ex.) user_idの値
      */
@@ -596,7 +569,6 @@ class Parser
 
     /**
      * 比較プロパティ、もしくは、比較血を取得
-     *
      * @param Dynamic $dynamic 動的ノード
      * @return mixed
      */

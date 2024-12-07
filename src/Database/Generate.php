@@ -35,8 +35,6 @@ class Generate extends Configurable
     /** @var CatalogManager|null カタログマネージャ */
     protected CatalogManager|null $catalogManager = null;
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -59,7 +57,6 @@ class Generate extends Configurable
 
     /**
      * Conditionクラスの生成
-     *
      * @param string $class_prefix クラス接頭辞
      */
     public function condition(string $class_prefix): void
@@ -91,7 +88,6 @@ class Generate extends Configurable
 
     /**
      * Daoクラスの生成
-     *
      * @param string $class_prefix クラス接頭辞
      * @param string $table_name   テーブル名
      */
@@ -125,7 +121,6 @@ class Generate extends Configurable
 
     /**
      * Propertyクラスの生成
-     *
      * @param string $class_prefix クラス接頭辞
      * @param string $table_name   テーブル名
      */
@@ -193,7 +188,6 @@ BODY
 
     /**
      * クラスの一括生成
-     *
      * @param string $class_prefix クラス接頭辞
      * @param string $table_name   テーブル名
      */
@@ -241,7 +235,6 @@ BODY
 
     /**
      * テーブルカラムの型からPHPの型に変換
-     *
      * @param string $data_type カラムデータタイプ
      * @return string PHPの型
      */

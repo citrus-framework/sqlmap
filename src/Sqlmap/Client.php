@@ -20,11 +20,8 @@ class Client extends Executor
     /** @var string SQLMAPのパス */
     protected string $sqlmap_path;
 
-
-
     /**
      * SQLMAPパスのセットアップ
-     *
      * @param string $sqlmap_path SQLMAPファイルのパス
      * @return $this
      * @throws SqlmapException

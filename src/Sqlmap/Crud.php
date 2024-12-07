@@ -22,11 +22,8 @@ class Crud extends Client
 {
     use Validation;
 
-
-
     /**
      * サマリークエリの実行結果
-     *
      * @param Columns|Condition $condition
      * @return ResultSet
      * @throws SqlmapException
@@ -44,11 +41,8 @@ class Crud extends Client
         }
     }
 
-
-
     /**
      * 詳細クエリの実行結果
-     *
      * @param Columns|Condition $condition
      * @return ResultSet
      * @throws SqlmapException
@@ -66,11 +60,8 @@ class Crud extends Client
         }
     }
 
-
-
     /**
      * 件数クエリの実行結果
-     *
      * @param Columns|Condition $condition
      * @return int
      * @throws SqlmapException
@@ -90,11 +81,8 @@ class Crud extends Client
         }
     }
 
-
-
     /**
      * 登録クエリ
-     *
      * @param Columns|Entity $entity
      * @return int
      * @throws SqlmapException
@@ -112,11 +100,8 @@ class Crud extends Client
         }
     }
 
-
-
     /**
      * 編集クエリ
-     *
      * @param Columns|Entity $entity
      * @return int
      * @throws SqlmapException
@@ -140,11 +125,8 @@ class Crud extends Client
         }
     }
 
-
-
     /**
      * 削除クエリ
-     *
      * @param Columns|Condition $condition
      * @return int
      * @throws SqlmapException

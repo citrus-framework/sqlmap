@@ -39,11 +39,8 @@ class Dynamic
     /** @var string 中身のクエリー */
     public string $query = '';
 
-
-
     /**
      * constructor.
-     *
      * @param DOMNamedNodeMap|null $attributes
      */
     public function __construct(?DOMNamedNodeMap $attributes = null)
@@ -75,7 +72,6 @@ class Dynamic
 
     /**
      * concatenate this
-     *
      * @param Dynamic $dynamic
      */
     public function concatenate(Dynamic $dynamic): void
@@ -104,7 +100,6 @@ class Dynamic
 
     /**
      * concatenate this
-     *
      * @param string $query
      */
     public function concatenateString(string $query): void
@@ -119,7 +114,6 @@ class Dynamic
 
     /**
      * combine other to other
-     *
      * @param Dynamic $dynamic
      * @param Dynamic $var
      * @return string
@@ -139,7 +133,6 @@ class Dynamic
 
     /**
      * prependの取得
-     *
      * @return string
      */
     public function getPrepend(): string
@@ -149,7 +142,6 @@ class Dynamic
 
     /**
      * クエリの取得
-     *
      * @return string
      */
     public function getQuery(): string

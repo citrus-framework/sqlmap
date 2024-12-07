@@ -25,11 +25,8 @@ class GenerateCommand extends Console
         'class_prefix:',
     ];
 
-
-
     /**
      * {@inheritDoc}
-     *
      * @throws ConfigureException
      */
     public function execute(): void

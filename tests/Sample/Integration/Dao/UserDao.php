@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * generated Citrus Dao file at 2024-06-30 04:20:15
+ * generated Citrus Dao file at 2024-12-07 05:08:58
  */
 
 namespace Test\Sample\Integration\Dao;

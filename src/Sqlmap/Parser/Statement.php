@@ -30,11 +30,8 @@ class Statement
     /** @var string|null クエリ文字列 */
     public string|null $query;
 
-
-
     /**
      * constructor.
-     *
      * @param DOMNamedNodeMap|null $attributes
      */
     public function __construct(?DOMNamedNodeMap $attributes = null)
