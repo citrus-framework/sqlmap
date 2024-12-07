@@ -26,11 +26,8 @@ trait Entity
     /** @var string[] */
     public $condition_keys = [];
 
-
-
     /**
      * Conditionを取得
-     *
      * @return Condition|Columns
      */
     public function getCondition(): Columns
@@ -38,11 +35,8 @@ trait Entity
         return $this->condition;
     }
 
-
-
     /**
      * Conditionを生成して返却
-     *
      * @return Condition|Columns
      */
     public function callCondition(): Columns

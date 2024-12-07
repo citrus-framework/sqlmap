@@ -67,7 +67,7 @@ return [
         ],
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class => [
             'linesCountBeforeFirstContent' => 0,
-            'linesCountBetweenDescriptionAndAnnotations' => 1,
+            'linesCountBetweenDescriptionAndAnnotations' => 0,
             'linesCountBetweenDifferentAnnotationsTypes' => 0,
             'linesCountBetweenAnnotationsGroups' => 0,
             'linesCountAfterLastContent' => 0,

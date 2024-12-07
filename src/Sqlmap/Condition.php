@@ -33,8 +33,6 @@ trait Condition
     /** @var bool is count */
     public $is_count = false;
 
-
-
     /**
      * constructor.
      */
@@ -50,11 +48,8 @@ trait Condition
         }
     }
 
-
-
     /**
      * page limit offset
-     *
      * @param int|null $page
      * @param int|null $limit
      */
@@ -70,11 +65,8 @@ trait Condition
         $this->offset = ($this->offset ?: ($limit * ($page - 1)));
     }
 
-
-
     /**
      * 曖昧一致
-     *
      * @param string|array|null $property
      */
     public function toLike($property = null): void
@@ -95,11 +87,8 @@ trait Condition
         }
     }
 
-
-
     /**
      * 前方一致
-     *
      * @param string|null $property
      */
     public function toLikePrefix(?string $property = null): void
@@ -110,11 +99,8 @@ trait Condition
         }
     }
 
-
-
     /**
      * 後方一致
-     *
      * @param string|null $property
      */
     public function toLikeSuffix(?string $property = null): void
@@ -125,11 +111,8 @@ trait Condition
         }
     }
 
-
-
     /**
      * 曖昧一致
-     *
      * @param string|null $property
      * @return string|null
      */
@@ -146,11 +129,8 @@ trait Condition
         return null;
     }
 
-
-
     /**
      * 前方一致
-     *
      * @param string|null $property
      * @return string|null
      */
@@ -163,11 +143,8 @@ trait Condition
         return null;
     }
 
-
-
     /**
      * 後方一致
-     *
      * @param string|null $property
      * @return string|null
      */
